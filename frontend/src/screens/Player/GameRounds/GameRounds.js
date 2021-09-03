@@ -45,6 +45,8 @@ const GameRounds = () => {
                 setTimeFormat(`${min}:${second}`)
             }
             setTime(timeValue - 1)
+            sessionStorage.setItem('time', timeValue - 1)
+            sessionStorage.setItem('percent', percent)
             console.log(timeValue-1)
             console.log(percent)
             setTimePercent(percent)
@@ -52,9 +54,13 @@ const GameRounds = () => {
             clearInterval(timerID.current);
             setDisabled(true)
             setTime(0)
+            sessionStorage.setItem('time', 0)
             choice === 1? setActive([true, false]) : setActive([false, true])
+            choice === 1? sessionStorage.setItem('active', JSON.stringify([true, false])) : sessionStorage.setItem('active', JSON.stringify([false, true]))
+            sessionStorage.setItem('choice', choice)
             socket.emit('choice', {choice, playerName})
             setTimeFormat('0:00')
+            sessionStorage.setItem('time-format', '0:00')
           }
     }, [choice, playerName, socket])
 
@@ -68,13 +74,28 @@ const GameRounds = () => {
         socket.on('showChoices', () => {
             window.location.href = `/player/results/${roundNo.id}`
         })
-        
+        if(sessionStorage.getItem('time')){
+            setTime(sessionStorage.getItem('time'))
+            if(sessionStorage.getItem('choice')){
+                setChoice(sessionStorage.getItem('choice'))
+            }
+            if(sessionStorage.getItem('time-format')){
+                setTimeFormat(sessionStorage.getItem('time-format'))
+            }
+            if(sessionStorage.getItem('timeC')){
+                setTimeC(true)
+            }
+            if(sessionStorage.getItem('active')){
+                setActive(JSON.parse(sessionStorage.getItem('active')))
+            }
+        }
         socket.on('quitGame', () => window.location.href = '/game')
         socket.on('skipped', nextRoundNumber => window.location.href = `/round/${nextRoundNumber}`)
         socket.once('timer', newTime => {
             if(!timeC){
                 setTime(newTime)
                 setTimeC(true)
+                sessionStorage.setItem('timeC',true)
                 timeP.current = newTime
             }
         })
@@ -96,6 +117,11 @@ const GameRounds = () => {
         socket.emit('choice', {choice, playerName})
         clearInterval(timerID);
         setTime(0)
+        sessionStorage.setItem('time', 0)
+        choice === 1? sessionStorage.setItem('active', JSON.stringify([true, false])) : sessionStorage.setItem('active', JSON.stringify([false, true]))
+        sessionStorage.setItem('choice', choice)
+        sessionStorage.setItem('time-format', '0:00')
+        sessionStorage.setItem('percent', 0)
         setTimeFormat('0:00')
         setTimePercent(0)
         setDisabled(true)
