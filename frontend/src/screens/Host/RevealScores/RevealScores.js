@@ -1,4 +1,4 @@
-import React, {useState, useContext, useEffect} from 'react'
+import React, {useState, useContext, useEffect, useRef} from 'react'
 import FlashCard from '../../../components/Flashcard/Flashcard'
 import ShowOptions from '../ShowOptions/ShowOptions'
 import Fish1 from "../../../images/Fish1-new.png"
@@ -13,13 +13,14 @@ import DeckIcons from '../../../components/DeckIcons/DeckIcons'
 const RevealScores = (props) => {
     const roundNo = useParams()
     const socket = useContext(SocketContext)
-    let playerData = []
+    let playerData = useRef([])
     
     if(Number(sessionStorage.getItem('status')) === 1){
-        playerData = props.location.state.value.playerInfo
+        playerData.current = props.location.state.value.playerInfo
+        sessionStorage.setItem('player-data', JSON.stringify(playerData.current))
     }
 
-    const [players, setPlayers] = useState(playerData)
+    const [players, setPlayers] = useState(playerData.current)
 
     const clickHandler = (playerName) => {
         console.log(playerName);
@@ -27,9 +28,13 @@ const RevealScores = (props) => {
     }
 
     useEffect(() => {
+        if(sessionStorage.getItem('update-players')){
+            setPlayers(JSON.parse(sessionStorage.getItem('update-players')))
+        }
         socket.emit('options', Number(sessionStorage.getItem('room')))
         socket.on('updated-players', updatedPlayers => {
             setPlayers(updatedPlayers)
+            sessionStorage.setItem('update-players', JSON.stringify(updatedPlayers))
         })
     }, [socket])
 

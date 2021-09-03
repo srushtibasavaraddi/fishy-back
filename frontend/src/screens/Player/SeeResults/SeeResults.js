@@ -13,8 +13,13 @@ const SeeResults = () => {
     const [players, setPlayers] = useState(playerData)
     const socket = useContext(SocketContext)
     useEffect(() => {
+        if(sessionStorage.getItem('updated-players')){
+            setPlayers(JSON.parse(sessionStorage.getItem('updated-players')))
+        }
         socket.emit('new-room')
-        socket.on('updated-players', updatedPlayers => setPlayers(updatedPlayers))
+        socket.on('updated-players', updatedPlayers => {
+                                    setPlayers(updatedPlayers)
+                                    sessionStorage.setItem('updated-players', JSON.stringify(updatedPlayers))})
         socket.on('come-to-scores', () => window.location.href = '/player/scores')
         socket.on('quitGame', () => {
             sessionStorage.clear()

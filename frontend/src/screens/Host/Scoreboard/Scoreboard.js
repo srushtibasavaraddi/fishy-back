@@ -26,6 +26,11 @@ const Scoreboard = () => {
             })
     },[socket])
 
+    const clickHandler2 = () => {
+        socket.emit('next-round')
+        sessionStorage.removeItem('update-players')
+    }
+
     return (
         <div className = "flex flex-col justify-center items-center">
             <FlashCard text = {`Scores`} />
@@ -59,7 +64,7 @@ const Scoreboard = () => {
                 }}>
             <Button  text = {'Next Round'} 
             display = {'bg-btn-bg-primary text-warning p-3 mt-2 btn-lg'}
-            clickHandler = {() => socket.emit('next-round')}
+            clickHandler = {() => clickHandler2()}
             />
             </Link>
         </div>
