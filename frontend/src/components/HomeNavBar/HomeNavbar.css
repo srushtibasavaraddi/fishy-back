@@ -1,0 +1,14 @@
+.nav-tabs > li.nav-item.active > button.active,
+.nav-tabs > li.nav-item.active > button:focus  {
+    border-bottom: 1px solid red;
+    border-top: none;
+    border-right: none;
+    background-color: white;
+    border-left: none;
+}
+
+
+.nav-tabs > li.nav-item.active > button:hover{
+    border: none;
+    border-bottom: 0.5px solid crimson;
+}

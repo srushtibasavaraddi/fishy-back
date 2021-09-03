@@ -1,0 +1,7 @@
+.active {
+    border-color: var(--primary-text);
+  }
+
+body {
+  overflow-y: hidden;
+}

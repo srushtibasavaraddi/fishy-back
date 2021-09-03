@@ -1,0 +1,20 @@
+.icon-btn {
+  padding: 0;
+  border-radius: 1.25rem;
+  background: var(--bg-icon) left top/cover no-repeat;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--fs-500);
+  font-weight: var(--fw-700);
+  color: var(--primary-text);
+  letter-spacing: 1px;
+  border: 0.275rem solid var(--btn-bg-border);
+  border-radius: var(--br);
+}
+
+.icon-btn img {
+  max-width: 150%;
+  height: 3.15rem;
+  pointer-events: none;
+}

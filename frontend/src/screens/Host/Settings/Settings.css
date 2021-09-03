@@ -1,0 +1,8 @@
+.inp{   
+    flex-basis: 50%;
+    background: var(--neutral);
+    border: 3px solid var(--btn-bg-secondary);
+    padding: 1rem;
+    color: var(--btn-bg-secondary);
+    border-radius: var(--br);
+}
