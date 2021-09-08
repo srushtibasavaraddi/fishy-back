@@ -69,10 +69,10 @@ module.exports = (io, socket) => {
         numberFish[2] = 0
 
         for (const player of players) {
-            if(player.choice === 1){
+            if(Number(player.choice) === 1){
                 choices[1] += 1
             }
-            else if(player.choice === 2){
+            else if(Number(player.choice) === 2){
                 choices[2] += 1
             }
         }
@@ -98,7 +98,7 @@ module.exports = (io, socket) => {
         }
         scores[roundNumber - 1] = []
         for(const player of players){
-            player.score = numberFish[player.choice]
+            player.score = numberFish[Number(player.choice)]
             scores[roundNumber-1].push(player.score)
         }
         console.log(`Sending data!`);
@@ -111,6 +111,12 @@ module.exports = (io, socket) => {
 
     //Start the next round(Host)
     const nextRound = () => {
+        for(const player of players){
+            player.choice = 0
+            player.toggle = 0
+            player.eye = false
+            player.score = 0
+        }
         roundNumber += 1
         if(roundNumber < MAX_ROUNDS){
             io.in('Scores').emit('new-round', roundNumber)
@@ -146,7 +152,7 @@ module.exports = (io, socket) => {
 
     //Add the selected fish to the player object
     const addChoice = ({choice, playerName}) => {
-        
+        console.log('Emit once');
         players.find((player, i) => {
             if (player.playerName === playerName) {
                 players[i] = { playerName: playerName, choice : choice, toggle : 0, eye : false }
@@ -154,6 +160,7 @@ module.exports = (io, socket) => {
                 }
         })
         numberChosen += 1
+        console.log(numberChosen);
         if(numberChosen === players.length){
             io.to('Host').emit('stop-timer')
             numberChosen = 0

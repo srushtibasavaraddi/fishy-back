@@ -37,11 +37,15 @@ const Discussion = ({players}) => {
                 setTimeFormat(`${min}:${second}`)
             }
             setTime(timeValue - 1)
+            sessionStorage.setItem('time', timeValue - 1)
+            sessionStorage.setItem('percent', percent)
             setTimePercent(percent)
           } else {
             clearInterval(timerID);
             setTime(0)
+            sessionStorage.setItem('time', 0)
             setTimeFormat('0:00')
+            sessionStorage.setItem('time-format', '0:00')
           }
     }, [])
 
@@ -51,15 +55,43 @@ const Discussion = ({players}) => {
 
     useEffect(() => {
       socket.emit('game')
-      socket.on('toggled', playerData => setPlayerInfo(playerData))
-      socket.on('chosen', playerData => setPlayerInfo(playerData))
+      socket.on('toggled', playerData => {
+        sessionStorage.setItem('player-option', JSON.stringify(playerData))
+        setPlayerInfo(playerData)})
+      socket.on('chosen', playerData => {
+        sessionStorage.setItem('player-option', JSON.stringify(playerData))
+        setPlayerInfo(playerData)})
       socket.on('stop-timer', () => {
         setTimeFormat('0:00')
         setTimePercent(0)
         setTime(0)
+        sessionStorage.setItem('time', 0)
+        sessionStorage.setItem('time-format', '0:00')
+        sessionStorage.setItem('percent', 0)
         setDisabled(false)
       })
-      socket.on('skipped', nextRoundNumber => window.location.href = `/round/${nextRoundNumber}`)
+      if(sessionStorage.getItem('time')){
+        setTime(sessionStorage.getItem('time'))
+        if(sessionStorage.getItem('time-format')){
+          setTimeFormat(sessionStorage.getItem('time-format'))
+        }
+        if(sessionStorage.getItem('percent')){
+          setTimePercent(sessionStorage.getItem('percent'))
+        }
+        if(sessionStorage.getItem('timeC')){
+          setTimeC(true)
+        }
+        if(sessionStorage.getItem('player-option')){
+          setPlayerInfo(JSON.parse(sessionStorage.getItem('player-option')))
+        }
+      }
+      socket.on('skipped', nextRoundNumber =>{ 
+        sessionStorage.removeItem('time')
+        sessionStorage.removeItem('time-format')
+        sessionStorage.removeItem('percent')
+        sessionStorage.removeItem('player-option')
+        sessionStorage.removeItem('timeC')
+        window.location.href = `/round/${nextRoundNumber}`})
       socket.once('timer', newTime => {
         if(!timeC){
             setTime(newTime)

@@ -43,7 +43,7 @@ const SeeResults = () => {
                             {player.eye?
                             <div className = "mt-5 xs-mobile:ml-auto xs-mobile:mr-auto">
                                       {
-                                          player.choice === 2?
+                                          Number(player.choice) === 2?
                                           (<ShowOptions fishes = {Fish2} />)
                                           :
                                           (<ShowOptions fishes = {Fish1} />)

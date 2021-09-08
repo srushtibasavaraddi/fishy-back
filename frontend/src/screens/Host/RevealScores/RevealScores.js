@@ -19,21 +19,23 @@ const RevealScores = (props) => {
         playerData.current = props.location.state.value.playerInfo
         sessionStorage.setItem('player-data', JSON.stringify(playerData.current))
     }
-
     const [players, setPlayers] = useState(playerData.current)
 
     const clickHandler = (playerName) => {
+        console.log(playerData.current, 'hi');
         console.log(playerName);
         socket.emit('show', playerName)
     }
 
     useEffect(() => {
         if(sessionStorage.getItem('update-players')){
+            console.log(JSON.parse(sessionStorage.getItem('update-players')));
             setPlayers(JSON.parse(sessionStorage.getItem('update-players')))
         }
         socket.emit('options', Number(sessionStorage.getItem('room')))
         socket.on('updated-players', updatedPlayers => {
             setPlayers(updatedPlayers)
+            console.log(updatedPlayers);
             sessionStorage.setItem('update-players', JSON.stringify(updatedPlayers))
         })
     }, [socket])
@@ -68,7 +70,8 @@ const RevealScores = (props) => {
                                 clickHandler = {() => clickHandler(player.playerName)}
                                 />
                             </div>}
-                            {player.choice === 1?
+                            {Number(player.choice) === 1?
+                            
                             <div className = "xs-mobile:ml-auto xs-mobile:mr-auto mt-5">
                             <ShowOptions fishes = {Fish1} />
                             </div>:

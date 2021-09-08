@@ -52,17 +52,19 @@ const GameRounds = () => {
             setTimePercent(percent)
           } else {
             clearInterval(timerID.current);
+            if(!disabled){
+                socket.emit('choice', {choice, playerName})
+            }
             setDisabled(true)
             setTime(0)
             sessionStorage.setItem('time', 0)
-            choice === 1? setActive([true, false]) : setActive([false, true])
-            choice === 1? sessionStorage.setItem('active', JSON.stringify([true, false])) : sessionStorage.setItem('active', JSON.stringify([false, true]))
+            Number(choice) === 1? setActive([true, false]) : setActive([false, true])
+            Number(choice) === 1? sessionStorage.setItem('active', JSON.stringify([true, false])) : sessionStorage.setItem('active', JSON.stringify([false, true]))
             sessionStorage.setItem('choice', choice)
-            socket.emit('choice', {choice, playerName})
             setTimeFormat('0:00')
             sessionStorage.setItem('time-format', '0:00')
           }
-    }, [choice, playerName, socket])
+    }, [choice, playerName, socket, disabled])
 
     const countTime = useCallback(() => {
         
@@ -90,7 +92,14 @@ const GameRounds = () => {
             }
         }
         socket.on('quitGame', () => window.location.href = '/game')
-        socket.on('skipped', nextRoundNumber => window.location.href = `/round/${nextRoundNumber}`)
+        socket.on('skipped', nextRoundNumber => {
+            sessionStorage.removeItem('choice')
+            sessionStorage.removeItem('timeC')
+            sessionStorage.removeItem('time-format')
+            sessionStorage.removeItem('time')
+            sessionStorage.removeItem('active')
+            sessionStorage.removeItem('percent')
+            window.location.href = `/round/${nextRoundNumber}`})
         socket.once('timer', newTime => {
             if(!timeC){
                 setTime(newTime)
@@ -125,7 +134,7 @@ const GameRounds = () => {
         setTimeFormat('0:00')
         setTimePercent(0)
         setDisabled(true)
-        choice === 1? setActive([true, false]) : setActive([false, true])
+        Number(choice) === 1? setActive([true, false]) : setActive([false, true])
     }
 
     const captureClick = () => {

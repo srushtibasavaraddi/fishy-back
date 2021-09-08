@@ -21,6 +21,7 @@ const Scoreboard = () => {
             socket.emit('show-scores')
             socket.emit('get-scores')
             socket.on('scores', ({scores, players }) => {
+                console.log(scores)
                 setScores(scores)
                 setPlayers(players)
             })
@@ -29,6 +30,11 @@ const Scoreboard = () => {
     const clickHandler2 = () => {
         socket.emit('next-round')
         sessionStorage.removeItem('update-players')
+        sessionStorage.removeItem('time')
+        sessionStorage.removeItem('time-format')
+        sessionStorage.removeItem('percent')
+        sessionStorage.removeItem('player-option')
+        sessionStorage.removeItem('timeC')
     }
 
     return (
