@@ -56,7 +56,7 @@ const DeckIcons = () => {
                 </div>
                 </div>
                 <div className = "self-center flex justify-center items-center ml-auto mr-auto">
-                <img src = {rules_4}  alt = "rules" className = 'xs-mobile:h-full md:h-5/6 w-full' />
+                <img src = {rules_4}  alt = "rules" className = 'xs-mobile:h-full md:h-full w-full' />
                 </div>
             </Modal> : null}
             {quit?

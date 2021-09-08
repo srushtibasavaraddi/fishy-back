@@ -2,11 +2,9 @@ import React, {useEffect} from 'react'
 import './Scores.css'
 
 const Scores = ({show, scores, players}) => {
-    useEffect(() => {
-      setTimeout(() => {
-        document.querySelector(".active").scrollIntoView();
-      }, 2000);
-    });
+    // useEffect(() => {
+    //     document.querySelector(".active").scrollIntoView();
+    // });
     let total = [0,0,0,0]
     let rowScore = 0
     return (

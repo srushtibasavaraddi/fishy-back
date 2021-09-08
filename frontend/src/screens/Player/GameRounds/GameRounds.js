@@ -150,7 +150,9 @@ const GameRounds = () => {
     return (
         <div className = "p-1 mt-1 flex flex-col h-screen">
             <div className = "flex flex-col items-center justify-center flex-1 ">
+                <div className = 'md:w-96 xs-mobile:w-9/12'>
                 <FlashCard text = {`Round ${roundNo.id}`} />
+                </div>
                 <Timer 
                 time = {timeFormat}
                 completed = {timePercent}

@@ -69,6 +69,7 @@ const Discussion = ({players}) => {
         sessionStorage.setItem('time-format', '0:00')
         sessionStorage.setItem('percent', 0)
         setDisabled(false)
+        sessionStorage.setItem('disabled', false)
       })
       if(sessionStorage.getItem('time')){
         setTime(sessionStorage.getItem('time'))
@@ -84,7 +85,11 @@ const Discussion = ({players}) => {
         if(sessionStorage.getItem('player-option')){
           setPlayerInfo(JSON.parse(sessionStorage.getItem('player-option')))
         }
+        if((sessionStorage.getItem('disabled'))){
+          setDisabled(false)
+        }
       }
+
       socket.on('skipped', nextRoundNumber =>{ 
         sessionStorage.removeItem('time')
         sessionStorage.removeItem('time-format')
@@ -110,9 +115,10 @@ const Discussion = ({players}) => {
     
 
     return (
-        <div className = "flex flex-col justify-center items-center h-screen">
+        <div className = "p-1 mt-1 flex flex-col justify-center items-center h-screen">
+          <div className='md:w-96 xs-mobile:w-9/12'>
             <FlashCard text = {`Round ${roundNo.id}`} />
-                
+            </div>      
             <Timer 
             time = {timeFormat}
             completed = {timePercent}

@@ -1,16 +1,19 @@
 import React from 'react'
-import NavComponent from '../NavComponent'
 import './HomeNavbar.css'
-
-const HomeNavbar = ({showPlayer, showHost}) => {
+import PlayerScreen from '../../screens/Player/PlayerScreen/PlayerScreen';
+import Tab from 'react-bootstrap/Tab'
+import HostScreen from '../../screens/Host/HostScreen/HostScreen';
+import NavComponent from '../NavComponent';
+const HomeNavbar = () => {
+    
     return (
-        <NavComponent>
-            <li className = "nav-item ml-auto mr-auto py-1 px-6 active">
-                <button className = "nav-link text-xl text-dark py-2 px-6" data-bs-toggle="tab" onClick = {showPlayer} >Join</button>
-            </li>
-            <li className = "nav-item ml-auto mr-auto py-1 px-6 active">
-                <button className = "nav-link text-xl text-dark py-2 px-6" data-bs-toggle="tab" onClick = {showHost} >Host</button>
-            </li>
+        <NavComponent ekey = {'home'}>
+                <Tab eventKey="home" title="Join" tabClassName = 'w-100'>
+                    <PlayerScreen />
+                </Tab>
+                <Tab eventKey="profile" title="Host" tabClassName = 'w-100 flex-grow-1'>
+                <HostScreen />
+                </Tab>
         </NavComponent>
     )
 }

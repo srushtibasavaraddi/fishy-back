@@ -4,11 +4,12 @@
     padding: 0.85rem 4rem;
     background: var(--btn-bg-primary);
     background-repeat: no-repeat;
-    background-size: 170% auto;
+    background-size: cover;
     color: var(--primary-text);
     letter-spacing: 1px;
     border: 0.275rem solid var(--btn-bg-border);
     border-radius: var(--br);
+    width: 100%;
   }
   
 @media screen and (max-width: 500px){

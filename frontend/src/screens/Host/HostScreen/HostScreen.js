@@ -3,11 +3,10 @@ import { Link } from 'react-router-dom'
 
 const HostScreen = () => {
     return (
-    <div className='bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4'>
+    <div className='w-full flex flex-col bg-card bg-no-repeat bg-cover bg-blend-screen shadow-lg rounded-lg px-8 pt-6 pb-8  h-full text-yellow-500 justify-center items-center'>
         Admin authentication
-        <br></br>
         <Link to='/admin/link'>
-            <button className='btn btn-primary btn-lg'>Enter</button>
+            <button className='bg-btn-bg-primary border-2 border-yellow-500 text-yellow-500 btn-lg mt-5'>Enter</button>
         </Link>
     </div>
     )
