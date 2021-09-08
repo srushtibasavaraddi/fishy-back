@@ -110,7 +110,7 @@ const Discussion = ({players}) => {
     
 
     return (
-        <div className = "flex flex-col justify-center items-center">
+        <div className = "flex flex-col justify-center items-center h-screen">
             <FlashCard text = {`Round ${roundNo.id}`} />
                 
             <Timer 

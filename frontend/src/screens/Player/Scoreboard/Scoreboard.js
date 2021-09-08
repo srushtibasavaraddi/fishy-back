@@ -52,9 +52,9 @@ const Scoreboard = () => {
         socket.on('end-game', () => window.location.href = `/gameover`)
     }, [socket, show, scoreData.length])
     return (
-        <div className = "flex flex-col justify-center items-center">
+        <div className = "flex flex-col justify-center items-center h-screen">
             <FlashCard text = {`Scores`} />
-            <div className = "tables flex flex-row justify-center self-center xs-mobile:w-full md:w-5/6 ml-auto mr-auto">
+            <div className = "tables flex flex-row justify-center self-center xs-mobile:w-full md:w-5/6 ml-auto mr-auto overflow-y-auto">
                 
                 {scoreData? 
                 <Scores 

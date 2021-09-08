@@ -11,6 +11,7 @@ const DeckIcons = () => {
     const socket = useContext(SocketContext)
     const [rules, showRules] = useState(false)
     const [quit, showQuit] = useState(false)
+    const status = Number(sessionStorage.getItem('status'))
     const clickHandler = () => {
         showRules(true)
     }
@@ -34,12 +35,14 @@ const DeckIcons = () => {
             clickHandler = {clickHandler}
             />
             </div>
+            {status === 1?
             <div className = 'p-2'>
             <Icons icon = {`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/cross.png`}
             title = {`Quit`}
             clickHandler = {quitGame}
             />
             </div>
+            : <div></div>}
             {rules?
             <Modal>
                 <div className = "inline-flex justify-end w-full">

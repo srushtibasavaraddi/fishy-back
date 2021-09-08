@@ -38,9 +38,9 @@ const Scoreboard = () => {
     }
 
     return (
-        <div className = "flex flex-col justify-center items-center">
+        <div className = "flex flex-col justify-center items-center h-screen">
             <FlashCard text = {`Scores`} />
-            <div className = "tables flex justify-center self-center xs-mobile:w-full md:w-5/6 ml-auto mr-auto">
+            <div className = "tables flex justify-center self-center xs-mobile:w-full md:w-5/6 ml-auto mr-auto overflow-y-auto">
                 <div className = "show-hidden-table">
                 <Icons
                     icon={

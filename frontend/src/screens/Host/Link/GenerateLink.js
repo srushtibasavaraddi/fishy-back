@@ -7,12 +7,14 @@ import { SocketContext } from '../../../context/SocketContext'
 import { Link } from 'react-router-dom'
 import Modal from '../../../components/Modal/Modal'
 import Settings from '../Settings/Settings'
+import Icons from '../../../components/Icons/Icons'
+import Rules from '../../Rules/Rules'
 
 const GenerateLink = () => {
     const socket = useContext(SocketContext)
     const [code, setCode] = useState('')
     const [settings, showSettings] = useState(false)
-
+  const   [rules, showRules] = useState(false)
     useEffect(() => {
       sessionStorage.setItem('status',1)
     })
@@ -25,9 +27,13 @@ const GenerateLink = () => {
       let room = code
       socket.emit('join', {room})
     };
+
+    const ruleHandler = () => {
+      showRules(!rules)
+    }
   
     return (
-      <div className = "flex flex-col">
+      <div className = "flex flex-col h-screen">
         <div className = "flex justify-end items-center">
         <div className = "inline-block">
         <Button text = {'Settings'} display = {'bg-btn-bg-primary btn-lg mr-auto text-warning'} clickHandler = {() => showSettings(!settings)} />
@@ -53,6 +59,18 @@ const GenerateLink = () => {
               />
               </div>)}
               <Form code = {code} />
+          <div className="flex justify-around items-end h-full flex-row w-full">
+              <div className = 'p-2'>
+              <Icons icon = {`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/rules-list.png`} 
+              title = {`Rules`}
+              clickHandler = {ruleHandler}
+              />
+          </div>
+          <div>
+            
+          </div>
+          </div>
+        
               {code?( 
               <Link
                 to={{
@@ -72,6 +90,11 @@ const GenerateLink = () => {
                 <Settings 
                 showSettings = {() => showSettings(false)}
                 />
+              </Modal> : null}
+              {rules ? 
+              <Modal>
+                <Rules 
+                showRules = {() => showRules(false)} />
               </Modal> : null}   
         </div>
 

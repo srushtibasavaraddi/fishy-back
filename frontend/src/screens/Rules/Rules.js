@@ -1,10 +1,10 @@
 import React from 'react'
 import MyCarousel from '../../components/MyCarousel'
 
-const Rules = () => {
+const Rules = ({showRules}) => {
     return (
         <div>
-            <MyCarousel />
+            <MyCarousel showRules = {showRules} />
         </div>
     )
 }

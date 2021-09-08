@@ -1,6 +1,7 @@
 import React, {useState, useCallback, useEffect, useContext, useRef} from 'react'
 import { useParams } from 'react-router-dom';
 import Button from '../../../components/Button';
+import DeckIcons from '../../../components/DeckIcons/DeckIcons';
 import FishOptions from '../../../components/FishOptions/FishOptions';
 import FlashCard from '../../../components/Flashcard/Flashcard';
 import Icons from '../../../components/Icons/Icons';
@@ -147,7 +148,7 @@ const GameRounds = () => {
     }
 
     return (
-        <div className = "p-1 mt-1 flex flex-col">
+        <div className = "p-1 mt-1 flex flex-col h-screen">
             <div className = "flex flex-col items-center justify-center flex-1 ">
                 <FlashCard text = {`Round ${roundNo.id}`} />
                 <Timer 
@@ -234,6 +235,7 @@ const GameRounds = () => {
                 :
                 null
             }
+            <DeckIcons />
         </div>
     )
 }
