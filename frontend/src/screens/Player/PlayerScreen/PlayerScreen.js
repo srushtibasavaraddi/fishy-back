@@ -1,13 +1,14 @@
-import React, {useState, useEffect} from 'react'
+import React, {useState, useEffect, useContext} from 'react'
 import Button from '../../../components/Button'
 import { Link } from 'react-router-dom'
+import {SocketContext} from '../../../context/SocketContext'
 
 const PlayerScreen = () => {
+    const socket = useContext(SocketContext)
     const [inputCode, setInputCode] = useState('')
     const [playerName, setPlayerName] = useState('')
-
+    const [code, correctCode] = useState(false)
     useEffect(() => {
-      
       sessionStorage.setItem('status', 0)
     })
 
@@ -20,6 +21,20 @@ const PlayerScreen = () => {
     }
 
     const enterGame = () => {
+      console.log('clicked');
+      socket.emit('authenticate', inputCode)
+      socket.on('authenticated', (value) => {
+        console.log('Fire once');
+        if(value === 1){
+        window.location.href = `/lobby/${inputCode}`
+        correctCode(true)}
+      else{
+        if(!code){
+          alert('Wrong code')
+          correctCode(true)
+        }
+      }})
+      
       sessionStorage.setItem('playerName', playerName)
     }
 
@@ -35,7 +50,7 @@ const PlayerScreen = () => {
             type='text'
             placeholder='Eg:12345'
             value={inputCode}
-            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline text-warning'
+            className='shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline'
             onChange={(e) => handlegameLink(e)}
             required></input>
         </div>
@@ -55,17 +70,12 @@ const PlayerScreen = () => {
             required></input>
         </div>
         <div className = 'self-center'>
-        <Link
-                to={{
-                  pathname: `/lobby/${inputCode}`,
-                }}>
         <Button
           style={{ width: '150px' }}
           display={'bg-btn-primary text-warning border-2 border-yellow-500 rounded-xl btn-lg self-center'}
           text='Join'
           clickHandler = {enterGame}
         />
-        </Link>
         </div>
       </div>
     )

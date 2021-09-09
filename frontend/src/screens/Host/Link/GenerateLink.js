@@ -12,6 +12,9 @@ import Rules from '../../Rules/Rules'
 import NavComponent from '../../../components/NavComponent'
 import Tab from 'react-bootstrap/Tab'
 import './GenerateLink.css'
+import PlayerScreen from '../../../screens/Player/PlayerScreen/PlayerScreen';
+import Refresh from '../../../images/refresh.png'
+import SettingIcon from '../../../images/settings.png'
 
 const GenerateLink = () => {
     const socket = useContext(SocketContext)
@@ -38,23 +41,26 @@ const GenerateLink = () => {
       <div className = 'flex flex-col h-screen w-full'>
         <div className='flex flex-col justify-center items-start w-full'>
           <div className = 'block mt-2'>
-              <Button text = {'Settings'} display = {'bg-btn-bg-primary btn-lg mr-auto text-warning'} clickHandler = {() => showSettings(!settings)} />
+              <Icons icon = {SettingIcon} clickHandler = {() => showSettings(!settings)} />
           </div>
-          <div className='inline-block ml-auto mr-auto mt-5'>
+          <div className='inline-block ml-auto mr-auto mt-3'>
             <FlashCard text = {'Fishy Equilibrium'} />
           </div>
         </div>
         <div className='max-w-7xl self-center ml-auto mr-auto'>
         <NavComponent ekey = 'profile'>
+        <Tab eventKey = "home" title = "Join" tabClassName = "w-100">
+          <PlayerScreen />
+        </Tab>
         <Tab eventKey="profile" title="Host" tabClassName = 'w-100 flex-grow-1'>
                 {code?
                 <div className='flex flex-row justify-center items-center p-8'>
-                <Heading display = {'text-center font-normal md:text-xl inline-block text-warning'} text = {`Room Code: ${code}`} />
-                <Button display = {'btn btn-warning btn-sm text-yellow-800 inline-block ml-2'} text = {'Refresh'} clickHandler = {generateCode} />
+                <Heading display = {'text-center font-normal md:text-xl inline-block text-warning p-3'} text = {`Room Code: ${code}`} />
+                <Icons icon = {Refresh} title = {'Refresh'} clickHandler = {generateCode} />
                 </div>
                  : 
                 <div className='flex flex-row justify-center items-center p-8'>
-                <Button display = {'btn btn-warning btn-lg text-yellow-800 inline-block'} text = {'Generate Game Code'} 
+                <Button display = {'btn btn-warning btn-lg inline-block'} text = {'Generate Game Code'} 
                 clickHandler = {generateCode}  />
                 </div>}
         </Tab>

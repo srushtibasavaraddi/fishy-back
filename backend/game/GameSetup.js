@@ -1,4 +1,4 @@
-let {players, roomSize, quitGameStatus, numberChosen, roundNumber, scores, MAX_ROUNDS } = require('./GameVariables')
+let {players, roomSize, quitGameStatus, numberChosen, roundNumber, scores, MAX_ROUNDS, password } = require('./GameVariables')
 
 module.exports = (io, socket) => {
 
@@ -37,6 +37,7 @@ module.exports = (io, socket) => {
             }
             else if(quitGameStatus === true){
                 players = []
+                password = password.filter(p =>  p !== room)
             }
             else{
                 console.log(quitGameStatus)
@@ -44,7 +45,7 @@ module.exports = (io, socket) => {
             io.in(room).emit('players', players)
             if(io.sockets.adapter.rooms.get(room).size === 1){
                 console.log(`The host has created the room!`)
-                
+                password.push(room)
             }
             console.log(io.sockets.adapter.rooms.get(room).size)
             quitGameStatus = false
@@ -106,7 +107,7 @@ module.exports = (io, socket) => {
         setTimeout(() => {
         io.to('Scores').emit('scores', {scores, players})
         console.log(`Data sent to player`);
-        }, 1500)
+        }, 2500)
     }
 
     //Start the next round(Host)
@@ -198,6 +199,17 @@ module.exports = (io, socket) => {
             io.in('Players').emit('end-game')
         }
     }
+
+    const authenticateRoomEntry = (room) => {
+        if(password.includes(Number(room))){
+            console.log('Fire');
+            io.to(socket.id).emit('authenticated', 1)
+        }
+        else{
+            io.to(socket.id).emit('authenticated', 5)
+            //io.to(socket.id).emit('authenticated', 0)
+        }
+    }
     //Socket listeners
     socket.on('skip-round', skipRound)
     socket.on('show', openEye)
@@ -209,4 +221,5 @@ module.exports = (io, socket) => {
     socket.on('game-start', startGame)
     socket.on('get-scores', getScores)
     socket.on('toggle', selectFish)
+    socket.on('authenticate', authenticateRoomEntry)
 }

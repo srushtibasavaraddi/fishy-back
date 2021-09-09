@@ -7,6 +7,7 @@ let MAX_ROUNDS = 11
 let quitGameStatus = false
 let timer = 120
 let bonusRoundArr =[]
+    , password = []
 
 module.exports = {
     players,
@@ -17,5 +18,6 @@ module.exports = {
     quitGameStatus, 
     MAX_ROUNDS, 
     timer,
-    bonusRoundArr
+    bonusRoundArr,
+    password
 }

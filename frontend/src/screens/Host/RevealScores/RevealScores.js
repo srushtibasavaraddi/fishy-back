@@ -42,7 +42,9 @@ const RevealScores = (props) => {
 
     return (
         <div className = "flex flex-col items-center justify-center">
-            <FlashCard text = {`Round ${roundNo.id}`} />
+                <div className = 'md:w-96 xs-mobile:w-9/12'>
+                    <FlashCard text = {`Round ${roundNo.id}`} />
+                </div>
             <div className = 'flex mt-2 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center'>
                 {
                     players.map(
