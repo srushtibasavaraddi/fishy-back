@@ -189,7 +189,14 @@ module.exports = (io, socket) => {
         scores[roundNumber - 1].push(0)
         i++
         }
-        roundNumber++
+        
+        for(const player of players){
+            player.choice = 0
+            player.toggle = 0
+            player.eye = false
+            player.score = 0
+        }
+        roundNumber += 1
         if(roundNumber < MAX_ROUNDS){
             io.to(socket.id).emit('skipped', roundNumber)
             io.in('Players').emit('skipped', roundNumber)

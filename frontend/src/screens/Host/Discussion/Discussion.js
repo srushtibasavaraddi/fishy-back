@@ -72,8 +72,9 @@ const Discussion = ({players}) => {
         sessionStorage.setItem('disabled', false)
       })
       if(sessionStorage.getItem('time')){
-        setTime(sessionStorage.getItem('time'))
+        setTime(Number(sessionStorage.getItem('time')))
         if(sessionStorage.getItem('time-format')){
+          console.log(time);
           setTimeFormat(sessionStorage.getItem('time-format'))
         }
         if(sessionStorage.getItem('percent')){
@@ -90,12 +91,11 @@ const Discussion = ({players}) => {
         }
       }
 
-      socket.on('skipped', nextRoundNumber =>{ 
+      socket.on('skipped', nextRoundNumber =>{
         sessionStorage.removeItem('time')
         sessionStorage.removeItem('time-format')
-        sessionStorage.removeItem('percent')
+        sessionStorage.removeItem('disabled')
         sessionStorage.removeItem('player-option')
-        sessionStorage.removeItem('timeC')
         window.location.href = `/round/${nextRoundNumber}`})
       socket.once('timer', newTime => {
         if(!timeC){
