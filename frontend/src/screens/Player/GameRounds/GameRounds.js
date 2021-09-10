@@ -94,6 +94,7 @@ const GameRounds = () => {
         }
         socket.on('quitGame', () => window.location.href = '/game')
         socket.on('skipped', nextRoundNumber => {
+            console.log(nextRoundNumber)
             sessionStorage.removeItem('choice')
             sessionStorage.removeItem('timeC')
             sessionStorage.removeItem('time-format')

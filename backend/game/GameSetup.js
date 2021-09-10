@@ -97,6 +97,15 @@ module.exports = (io, socket) => {
             numberFish[1] = 0
             numberFish[2] = -25
         }
+        if(roundNumber === 5){
+            numberFish = numberFish.map(n => n * 3)
+        }
+        else if(roundNumber === 8){
+            numberFish = numberFish.map(n => n * 5)
+        }
+        else if(roundNumber === 10){
+            numberFish = numberFish.map(n => n * 10)
+        }
         scores[roundNumber - 1] = []
         for(const player of players){
             player.score = numberFish[Number(player.choice)]
@@ -119,8 +128,9 @@ module.exports = (io, socket) => {
             player.score = 0
         }
         roundNumber += 1
+        console.log(roundNumber)
         if(roundNumber < MAX_ROUNDS){
-            io.in('Scores').emit('new-round', roundNumber)
+            io.to('Scores').emit('new-round', roundNumber)
         }
         else{
             io.to('Host').emit('end-game')
@@ -199,11 +209,13 @@ module.exports = (io, socket) => {
         roundNumber += 1
         if(roundNumber < MAX_ROUNDS){
             io.to(socket.id).emit('skipped', roundNumber)
-            io.in('Players').emit('skipped', roundNumber)
+            console.log(roundNumber);
+
+            io.to('Players').emit('skipped', roundNumber)
         }
         else{
             io.to(socket.id).emit('end-game')
-            io.in('Players').emit('end-game')
+            io.to('Players').emit('end-game')
         }
     }
 

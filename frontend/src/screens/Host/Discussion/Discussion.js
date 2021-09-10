@@ -110,7 +110,7 @@ const Discussion = ({players}) => {
             clearInterval(timerID.current)
         }
 
-    },[ countTime,  timerID, players, socket, timeC])
+    },[ countTime,  timerID, players, socket, timeC, time])
     
     
 
