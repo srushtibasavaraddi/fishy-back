@@ -1,7 +1,7 @@
 .icon-btn {
   padding: 0;
   border-radius: 1.25rem;
-  background: var(--bg-icon) left top/cover no-repeat;
+  background: var(--bg-icon) center center / cover no-repeat;
   display: inline-flex;
   justify-content: center;
   align-items: center;
@@ -16,5 +16,25 @@
 .icon-btn img {
   max-width: 150%;
   height: 3.15rem;
+  pointer-events: none;
+}
+
+.icon-btn.rules {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.icon-btn.rules img {
+  padding: 0.375em;
+  pointer-events: none;
+}
+
+.icon-btn.quit {
+  width: 3.5rem;
+  height: 3.5rem;
+}
+
+.icon-btn.quit img {
+  padding: 0.375em;
   pointer-events: none;
 }

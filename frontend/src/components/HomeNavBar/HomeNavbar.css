@@ -1,55 +1,50 @@
-.nav-tabs .nav-link
-{
-    border: none!important;
-    font-size: x-large;
-    width: 100%!important;
-    padding-left: 80px;
-    padding-right: 80px;
-    color: #F8AE1B!important;
-    background-color: #98501D!important;
-
+.nav-tabs .nav-link {
+  border: none !important;
+  font-size: x-large;
+  font-weight: 700;
+  width: 100% !important;
+  padding-left: 80px;
+  padding-right: 80px;
+  color: #f8ae1b !important;
+  background-color: #98501d !important;
 }
 
 @media screen and (max-width: 600px) {
-    .nav-tabs .nav-link
-{
-    border: none!important;
+  .nav-tabs .nav-link {
+    border: none !important;
     font-size: x-large;
-    width: 100%!important;
+    width: 100% !important;
     padding-left: 50px;
     padding-right: 50px;
-    color: #F8AE1B!important;
-    background-color: #98501D!important;
-
-}
+    color: #f8ae1b !important;
+    background-color: #98501d !important;
+  }
 }
 
 @media screen and (max-width: 320px) {
-    .nav-tabs .nav-link
-{
-    border: none!important;
+  .nav-tabs .nav-link {
+    border: none !important;
     font-size: x-large;
-    width: 100%!important;
+    width: 100% !important;
     padding-left: 52px;
     padding-right: 52px;
-    color: #F8AE1B!important;
-    background-color: #98501D!important;
-
-}
+    color: #f8ae1b !important;
+    background-color: #98501d !important;
+  }
 }
 
 .nav-tabs .nav-link.active {
-    color: #98501D!important;
-    background-color: #F8AE1B!important;
-    border: none!important;
-    font-size: x-large;
-    border-top-left-radius: none!important;
-    border-top-right-radius: none!important;
+  color: #98501d !important;
+  background-color: #f8ae1b !important;
+  border: none !important;
+  font-size: x-large;
+  border-top-left-radius: none !important;
+  border-top-right-radius: none !important;
 }
 
-.nav{
-    display: flex;
-    justify-content: flex-start;
-    width: 100%;
-    background-image: url('../../images/card.png');
+.nav {
+  display: flex;
+  justify-content: flex-start;
+  width: 100%;
+  background-image: url("../../images/card.png");
 }

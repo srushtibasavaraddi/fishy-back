@@ -1,20 +1,47 @@
-import React, {useEffect} from 'react'
-import './Scores.css'
+import React, { useEffect, useState } from "react";
+import "./Scores.css";
 
-const Scores = ({show, scores, players}) => {
-    // useEffect(() => {
-    //     document.querySelector(".active").scrollIntoView();
-    // });
-    let total = [0,0,0,0]
-    let rowScore = 0
-    useEffect(() => {
-      const ele = document.querySelector(".active");
-      if (ele) {
-        ele.scrollIntoView();
-      }
-    });
-    return (
-      <ul className="scores">
+const Scores = ({ show, scores, players }) => {
+  // const [scores, setScores] = useState([]);
+  // useEffect(() => {
+  //   let tempScores = [];
+  //   if (sessionStorage.getItem("cal-scores")) {
+  //     tempScores = JSON.parse(sessionStorage.getItem("cal-scores"));
+  //   }
+  //   tempScores.push([0, 0, 0, 0]);
+  //   if (tempScores.length > 0 && gameScores.length > 0) {
+  //     for (let i = 0; i < 4; i++) {
+  //       if (tempScores.length === 5) {
+  //         tempScores[tempScores.length - 1][i] =
+  //           gameScores[gameScores.length - 1][i] * 3;
+  //       } else if (tempScores.length === 8) {
+  //         tempScores[tempScores.length - 1][i] =
+  //           gameScores[gameScores.length - 1][i] * 5;
+  //       } else if (tempScores.length === 10) {
+  //         tempScores[tempScores.length - 1][i] =
+  //           gameScores[gameScores.length - 1][i] * 10;
+  //       } else {
+  //         tempScores[tempScores.length - 1][i] =
+  //           gameScores[gameScores.length - 1][i];
+  //       }
+  //     }
+  //     console.log("final output", tempScores[tempScores.length - 1]);
+  //     sessionStorage.setItem("cal-scores", JSON.stringify(tempScores));
+  //     setScores(tempScores);
+  //   }
+  // }, [gameScores]);
+
+  useEffect(() => {
+    const ele = document.querySelector(".active");
+    if (ele) {
+      ele.scrollIntoView();
+    }
+  });
+
+  let total = [0, 0, 0, 0];
+  let rowScore = 0;
+  return (
+    <ul className="scores">
       <li className={`titles grid-display ${show}`}>
         <p className="grid-display-item">Round</p>
         {players.map((player, index) => {
@@ -116,7 +143,7 @@ const Scores = ({show, scores, players}) => {
         ) : null}
       </li>
     </ul>
-    )
-}
+  );
+};
 
-export default Scores
+export default Scores;

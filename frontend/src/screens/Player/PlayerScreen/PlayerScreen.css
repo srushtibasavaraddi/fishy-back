@@ -1,0 +1,4 @@
+.join-btn .bg-btn-primary:hover {
+  background: var(--primary-text);
+  color: var(--btn-bg-secondary);
+}
