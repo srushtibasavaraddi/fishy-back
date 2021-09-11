@@ -159,7 +159,7 @@ const GameRounds = () => {
   useEffect(() => {
     if (
       sessionStorage.getItem("index") &&
-      sessionStorage.getItem("indivScores")
+      sessionStorage.getItem("indivScores") && sessionStorage.getItem('scores')
     ) {
       const scores = JSON.parse(sessionStorage.getItem("scores"));
       const indivScores = JSON.parse(sessionStorage.getItem("indivScores"));
