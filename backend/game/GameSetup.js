@@ -32,7 +32,7 @@ module.exports = (io, socket) => {
     } else {
       roomSize = 0;
     }
-    if (roomSize <= 5) {
+    if (roomSize < 5) {
       socket.join(room);
       if (playerName) {
         players.push({
