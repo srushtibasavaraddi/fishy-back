@@ -104,16 +104,24 @@ const GameRounds = () => {
       }
     }
     socket.on("quitGame", () => (window.location.href = "/game"));
-    socket.on("skipped", nextRoundNumber => {
-      console.log(nextRoundNumber);
-      sessionStorage.removeItem("choice");
-      sessionStorage.removeItem("timeC");
-      sessionStorage.removeItem("time-format");
-      sessionStorage.removeItem("time");
-      sessionStorage.removeItem("active");
-      sessionStorage.removeItem("percent");
-      window.location.href = `/round/${nextRoundNumber}`;
-    });
+    // socket.on("skipped", nextRoundNumber => {
+    //   console.log(nextRoundNumber);
+    //   sessionStorage.removeItem("choice");
+    //   sessionStorage.removeItem("timeC");
+    //   sessionStorage.removeItem("time-format");
+    //   sessionStorage.removeItem("time");
+    //   sessionStorage.removeItem("active");
+    //   sessionStorage.removeItem("percent");
+    //   if (sessionStorage.getItem("indivScores")) {
+    //     const indivScores = JSON.parse(sessionStorage.getItem("indivScores"));
+    //     indivScores.push(0);
+    //     setIndivScore(indivScores);
+    //     sessionStorage.setItem("indivScores", JSON.stringify(indivScores));
+    //   } else {
+    //     sessionStorage.setItem("indivScores", JSON.stringify([0]));
+    //   }
+    //   window.location.href = `/round/${nextRoundNumber}`;
+    // });
     socket.once("timer", newTime => {
       if (!timeC) {
         setTime(newTime);
@@ -127,6 +135,26 @@ const GameRounds = () => {
       clearInterval(timerID.current);
     };
   }, [countTime, socket, timerID, roundNo, playerName, timeC]);
+
+  useEffect(() => {
+    socket.on("skipped", nextRoundNumber => {
+      console.log(nextRoundNumber);
+      sessionStorage.removeItem("choice");
+      sessionStorage.removeItem("timeC");
+      sessionStorage.removeItem("time-format");
+      sessionStorage.removeItem("time");
+      sessionStorage.removeItem("active");
+      sessionStorage.removeItem("percent");
+      if (sessionStorage.getItem("scores")) {
+        let scores = JSON.parse(sessionStorage.getItem("scores"));
+        scores.push([0, 0, 0, 0]);
+        sessionStorage.setItem("scores", JSON.stringify(scores));
+      } else {
+        sessionStorage.setItem("scores", JSON.stringify([[0, 0, 0, 0]]));
+      }
+      window.location.href = `/round/${nextRoundNumber}`;
+    });
+  }, []);
 
   useEffect(() => {
     if (
