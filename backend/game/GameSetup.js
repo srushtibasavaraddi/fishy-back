@@ -130,7 +130,13 @@ module.exports = (io, socket) => {
     console.log(roundNumber);
     if (roundNumber < MAX_ROUNDS) {
       io.to("Scores").emit("new-round", roundNumber);
-    } else {
+    } else { 
+
+      players.length = 0;
+      roundNumber = 1;
+      numberChosen = 0;
+      scores = [[]];
+
       io.to("Host").emit("end-game");
       io.in("Scores").emit("end-game");
     }

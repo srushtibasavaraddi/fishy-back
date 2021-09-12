@@ -55,7 +55,10 @@ const Scoreboard = () => {
 
       window.location.href = `/round/${scoreData.length + 1}`;
     });
-    socket.on("end-game", () => (window.location.href = `/gameover`));
+    socket.on("end-game", () => {
+      sessionStorage.clear()
+      
+      window.location.href = `/gameover`});
   }, [socket, show, scoreData.length]);
   return (
     <div className="flex flex-col justify-center items-center h-screen">

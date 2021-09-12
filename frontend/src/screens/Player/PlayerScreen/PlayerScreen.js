@@ -35,6 +35,7 @@ const PlayerScreen = () => {
         }
       }
     });
+
     sessionStorage.setItem("playerName", playerName);
   };
 
