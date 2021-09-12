@@ -83,20 +83,20 @@ module.exports = (io, socket) => {
       }
     }
     if (choices[1] === 4 && choices[2] === 0) {
-      numberFish[1] = 25;
+      numberFish[1] = 250;
       numberFish[2] = 0;
     } else if (choices[1] === 3 && choices[2] === 1) {
       numberFish[1] = 0;
-      numberFish[2] = 75;
+      numberFish[2] = 750;
     } else if (choices[1] === 2 && choices[2] === 2) {
-      numberFish[1] = -12.5;
-      numberFish[2] = 50;
+      numberFish[1] = -125;
+      numberFish[2] = 500;
     } else if (choices[1] === 1 && choices[2] === 3) {
-      numberFish[1] = -25;
-      numberFish[2] = 25;
+      numberFish[1] = -250;
+      numberFish[2] = 250;
     } else if (choices[1] === 0 && choices[2] === 4) {
       numberFish[1] = 0;
-      numberFish[2] = -25;
+      numberFish[2] = -250;
     }
     if (roundNumber === 5) {
       numberFish = numberFish.map(n => n * 3);

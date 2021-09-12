@@ -18,16 +18,12 @@ import Fish1 from "../../../images/Fish1-new.png";
 import Fish2 from "../../../images/Fish2-new.png";
 import "./GameRounds.css";
 
-const GameRounds = () => {
-  let currentScore = useRef(0);
-  let roundScore = useRef([]);
+const GameRounds = ({players}) => {
   let timeP = useRef(120);
   const roundNo = useParams();
   const socket = useContext(SocketContext);
   const [time, setTime] = useState(120);
   const [timeC, setTimeC] = useState(false);
-  const scores = JSON.parse(sessionStorage.getItem("scores"));
-  const players = JSON.parse(sessionStorage.getItem("players"));
   const [timeFormat, setTimeFormat] = useState("0:00");
   const [timePercent, setTimePercent] = useState(0);
   const [choice, setChoice] = useState(1);
@@ -154,7 +150,7 @@ const GameRounds = () => {
       }
       window.location.href = `/round/${nextRoundNumber}`;
     });
-  }, []);
+  }, [socket]);
 
   useEffect(() => {
     if (
@@ -178,7 +174,7 @@ const GameRounds = () => {
       sessionStorage.setItem("index", JSON.stringify(playerIndex));
       sessionStorage.setItem("indivScores", JSON.stringify([]));
     }
-  }, []);
+  }, [playerName, players]);
 
   const selectChoice = num => {
     num === 1 ? setActive([true, false]) : setActive([false, true]);

@@ -18,7 +18,7 @@ const Game = (props) => {
         status === 1?
         (<Discussion players = {players}/>)
         :
-        (<GameRounds />)
+        (<GameRounds players = {players}/>)
         }
         </div>
     )

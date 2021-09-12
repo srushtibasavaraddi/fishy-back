@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
 import Button from "../../../components/Button";
-import { Link } from "react-router-dom";
 import { SocketContext } from "../../../context/SocketContext";
 import "./PlayerScreen.css";
 
