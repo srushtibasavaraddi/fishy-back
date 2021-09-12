@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import Icons from "../Icons/Icons";
 import Modal from "../Modal/Modal";
-import rules_4 from "../../images/rules-list-new.png";
 import FlashCard from "../Flashcard/Flashcard";
 import { SocketContext } from "../../context/SocketContext";
 import Heading from "../Heading";
 import Button from "../Button";
+import rules_4 from "../../images/rules_guide.png";
 
 const DeckIcons = () => {
   const socket = useContext(SocketContext);

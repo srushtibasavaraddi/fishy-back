@@ -82,17 +82,8 @@ const GenerateLink = () => {
           </Tab>
         </NavComponent>
       </div>
-      <div className="flex justify-around items-end h-full flex-row w-full">
-        <div className="p-2">
-          <Icons
-            icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/rules-list.png`}
-            title={`Rules`}
-            clickHandler={ruleHandler}
-          />
-        </div>
-        <div></div>
-      </div>
       {code ? (
+        <div className='m-auto mt-5'>
         <Link
           to={{
             pathname: `/lobby/${code}`,
@@ -103,14 +94,26 @@ const GenerateLink = () => {
         >
           <Button
             display={
-              "bg-btn-bg-primary bg-center text-warning btn-lg absolute bottom-5 right-5"
+              "bg-btn-bg-primary bg-center text-warning btn-lg"
             }
             text={"Next"}
             clickHandler={ClickHandler}
           />
         </Link>
+        </div>
       ) : null}
 
+      <div className="flex justify-around items-end h-full flex-row w-full">
+        <div className="p-2">
+          <Icons
+            icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/rules-list.png`}
+            title={`Rules`}
+            clickHandler={ruleHandler}
+          />
+        </div>
+        <div></div>
+      </div>
+      
       {settings ? (
         <Modal>
           <Settings showSettings={() => showSettings(false)} />

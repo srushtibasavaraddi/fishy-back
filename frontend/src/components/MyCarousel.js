@@ -3,7 +3,7 @@ import React from 'react'
 import rules_1 from "../images/rules-1.png";
 import rules_2 from "../images/rules-2.png";
 import rules_3 from "../images/rules-3.png";
-import rules_4 from "../images/rules-new-1.png";
+import rules_4 from "../images/rules_guide.png";
 import rules_5 from "../images/rules-5.png";
 import Heading from './Heading';
 
