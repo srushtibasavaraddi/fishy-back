@@ -6,7 +6,7 @@ const Endgame = () => {
             <img
         src={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/thankyou_.png`}
         alt="game end"
-        className = "h-2/6 w-4/6"
+        className="h-1/5 w-3/6"
       />
         </div>
     )
