@@ -21,6 +21,7 @@ import "./GameRounds.css";
 const GameRounds = ({players}) => {
   let timeP = useRef(120);
   const roundNo = useParams();
+  let multiplier = useRef(0)
   const socket = useContext(SocketContext);
   const [time, setTime] = useState(120);
   const [timeC, setTimeC] = useState(false);
@@ -50,8 +51,6 @@ const GameRounds = ({players}) => {
         setTime(timeValue - 1);
         sessionStorage.setItem("time", timeValue - 1);
         sessionStorage.setItem("percent", percent);
-        console.log(timeValue - 1);
-        console.log(percent);
         setTimePercent(percent);
       } else {
         clearInterval(timerID.current);
@@ -100,24 +99,6 @@ const GameRounds = ({players}) => {
       }
     }
     socket.on("quitGame", () => (window.location.href = "/game"));
-    // socket.on("skipped", nextRoundNumber => {
-    //   console.log(nextRoundNumber);
-    //   sessionStorage.removeItem("choice");
-    //   sessionStorage.removeItem("timeC");
-    //   sessionStorage.removeItem("time-format");
-    //   sessionStorage.removeItem("time");
-    //   sessionStorage.removeItem("active");
-    //   sessionStorage.removeItem("percent");
-    //   if (sessionStorage.getItem("indivScores")) {
-    //     const indivScores = JSON.parse(sessionStorage.getItem("indivScores"));
-    //     indivScores.push(0);
-    //     setIndivScore(indivScores);
-    //     sessionStorage.setItem("indivScores", JSON.stringify(indivScores));
-    //   } else {
-    //     sessionStorage.setItem("indivScores", JSON.stringify([0]));
-    //   }
-    //   window.location.href = `/round/${nextRoundNumber}`;
-    // });
     socket.once("timer", newTime => {
       if (!timeC) {
         setTime(newTime);
@@ -207,12 +188,21 @@ const GameRounds = ({players}) => {
       setActive([false, false]);
     }
   };
-
+  if(Number(roundNo.id) === 5){
+    multiplier.current = 3
+  }
+  else if(Number(roundNo.id) === 8){
+    multiplier.current = 5
+  }
+  else if(Number(roundNo.id) === 10){
+    multiplier.current = 10
+  }
   return (
     <div className="p-1 mt-1 flex flex-col h-screen game">
       <div className="flex flex-col items-center justify-center">
-        <div className="md:w-96 xs-mobile:w-9/12">
+        <div className="flex flex-row md:w-96 xs-mobile:w-9/12">
           <FlashCard text={`Round ${roundNo.id}`} />
+          {Number(roundNo.id) === 5 || Number(roundNo.id) === 8 || Number(roundNo.id) === 10? <p className='multiplier text-center p-2 w-16'>x {multiplier.current}</p> : null}
         </div>
         <Timer time={timeFormat} completed={timePercent} />
       </div>
@@ -253,7 +243,7 @@ const GameRounds = ({players}) => {
           }
         />
       )}
-      <div className="absolute md:top-1/4 md:right-12 xs-mobile:top-20 xs-mobile:right-8">
+      <div className="absolute md:top-1/4 md:right-12 xs-mobile:top-44 xs-mobile:right-8">
         <Icons
           icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/coins.png`}
           clickHandler={() => showScore(!score)}
