@@ -43,6 +43,7 @@ const GenerateLink = () => {
           <Icons
             icon={SettingIcon}
             clickHandler={() => showSettings(!settings)}
+            title = {'Settings'}
           />
         </div>
         <div className="inline-block ml-auto mr-auto mt-3">

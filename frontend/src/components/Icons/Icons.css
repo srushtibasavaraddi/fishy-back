@@ -38,3 +38,11 @@
   padding: 0.375em;
   pointer-events: none;
 }
+
+.icon-btn.settings {
+  border: none;
+}
+
+.icon-btn.refresh {
+  border: none;
+}
