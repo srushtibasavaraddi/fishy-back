@@ -35,6 +35,8 @@ const Scoreboard = () => {
     sessionStorage.removeItem("percent");
     sessionStorage.removeItem("player-option");
     sessionStorage.removeItem("timeC");
+    sessionStorage.removeItem("disabled");
+
   };
 
   return (
