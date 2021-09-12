@@ -55,7 +55,7 @@ module.exports = (io, socket) => {
       console.log(io.sockets.adapter.rooms.get(room).size);
       quitGameStatus = false;
     } else {
-      socket.emit("error", {
+      io.to(socket.id).emit("error", {
         message:
           "Max Players have joined, please wait till the next game starts.",
       });

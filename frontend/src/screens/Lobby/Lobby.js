@@ -30,6 +30,11 @@ const Lobby = () => {
         setPlayers(playerData);
         sessionStorage.setItem("players", JSON.stringify(playerData));
       });
+      socket.on('error', ({message}) => {
+        alert(message)
+        window.location.href = '/game'
+      })
+      
       socket.on("Game-start", () => {
         sessionStorage.setItem("room", roomCode.id);
         window.location.href = "/round/1";
