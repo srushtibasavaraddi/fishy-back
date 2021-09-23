@@ -11,7 +11,6 @@ import Rules from "../../Rules/Rules";
 import NavComponent from "../../../components/NavComponent";
 import Tab from "react-bootstrap/Tab";
 import "./GenerateLink.css";
-import PlayerScreen from "../../../screens/Player/PlayerScreen/PlayerScreen";
 import Refresh from "../../../images/refresh.png";
 import SettingIcon from "../../../images/settings.png";
 
@@ -20,31 +19,33 @@ const GenerateLink = () => {
   const [code, setCode] = useState("");
   const [settings, showSettings] = useState(false);
   const [rules, showRules] = useState(false);
+
   useEffect(() => {
+    socket.emit('settings')
+    socket.on('code', code => setCode(code))
     sessionStorage.setItem("status", 1);
-  });
+  },[socket]);
 
   const generateCode = () => {
-    setCode(Math.floor(100000 + Math.random() * 900000));
-  };
-
-  const ClickHandler = () => {
-    let room = code;
-    socket.emit("join", { room });
+    socket.emit('refresh')
+    socket.on('refresh-code', code => setCode(code))
   };
 
   const ruleHandler = () => {
     showRules(!rules);
   };
+
   return (
     <div className="flex flex-col h-screen w-full">
       <div className="flex flex-col justify-center items-start w-full">
         <div className="block mt-2">
+          {sessionStorage.getItem('status') === '1'?
           <Icons
             icon={SettingIcon}
             clickHandler={() => showSettings(!settings)}
             title = {'Settings'}
           />
+          : null}
         </div>
         <div className="inline-block ml-auto mr-auto mt-3">
           <FlashCard text={"Fishy Equilibrium"} />
@@ -52,16 +53,10 @@ const GenerateLink = () => {
       </div>
       <div className="max-w-7xl self-center ml-auto mr-auto">
         <NavComponent ekey="profile">
-          <Tab eventKey="home" title="Join" tabClassName="w-100">
-            <PlayerScreen />
-          </Tab>
           <Tab eventKey="profile" title="Host" tabClassName="w-100 flex-grow-1">
             {code ? (
               <div className="flex flex-row justify-center items-center p-8">
                 <Heading
-                  display={
-                    "text-center font-normal md:text-xl inline-block text-warning p-3"
-                  }
                   text={`Room Code: ${code}`}
                 />
                 <Icons
@@ -71,13 +66,7 @@ const GenerateLink = () => {
                 />
               </div>
             ) : (
-              <div className="flex flex-row justify-center items-center p-8 gen-btn">
-                <Button
-                  display={"btn btn-warning btn-lg inline-block"}
-                  text={"Generate Game Code"}
-                  clickHandler={generateCode}
-                />
-              </div>
+              null
             )}
           </Tab>
         </NavComponent>
@@ -94,10 +83,10 @@ const GenerateLink = () => {
         >
           <Button
             display={
-              "bg-btn-bg-primary bg-center text-warning btn-lg"
+              "bg-btn-bg-primary text-warning"
             }
             text={"Next"}
-            clickHandler={ClickHandler}
+            clickHandler={() => sessionStorage.setItem('game-code', code)}
           />
         </Link>
         </div>
@@ -116,7 +105,8 @@ const GenerateLink = () => {
       
       {settings ? (
         <Modal>
-          <Settings showSettings={() => showSettings(false)} />
+          <Settings showSettings={() => showSettings(false)} 
+          gameCode = {code} />
         </Modal>
       ) : null}
 

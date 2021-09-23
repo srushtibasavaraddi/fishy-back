@@ -1,42 +1,29 @@
 import React, { useContext, useState, useEffect } from "react";
 import { SocketContext } from "../../context/SocketContext";
-import { useParams } from "react-router";
 import FlashCard from "../../components/Flashcard/Flashcard";
 import Button from "../../components/Button";
 import { Link } from "react-router-dom";
+import './Lobby.css'
 
 const Lobby = () => {
-  const roomCode = useParams();
   const socket = useContext(SocketContext);
   const [players, setPlayers] = useState([]);
   let status = Number(sessionStorage.getItem("status"));
   const clickHandler = () => {
-    let room = Number(roomCode.id);
-    socket.emit("game-start", { room });
+    socket.emit('start-game', sessionStorage.getItem('game-code'))
   };
 
   useEffect(() => {
-    console.log(socket.id);
     let isMounted = true;
     console.log(status);
     if (isMounted) {
-      if (status === 0) {
-        let room = Number(roomCode.id);
-        let playerName = sessionStorage.getItem("playerName");
-        socket.emit("join", { playerName, room });
-      }
-      socket.on("players", playerData => {
-        console.log("Hi");
-        setPlayers(playerData);
-        sessionStorage.setItem("players", JSON.stringify(playerData));
-      });
-      socket.on('error', ({message}) => {
-        alert(message)
-        window.location.href = '/game'
-      })
+      socket.emit('join-lobby', sessionStorage.getItem('game-code'))
       
-      socket.on("Game-start", () => {
-        sessionStorage.setItem("room", roomCode.id);
+      socket.on("players", playerData => {
+        setPlayers(playerData);
+      });
+  
+      socket.on("start", () => {
         window.location.href = "/round/1";
       });
     }
@@ -45,17 +32,20 @@ const Lobby = () => {
       isMounted = false;
       setPlayers([]);
     };
-  }, [roomCode.id, socket, status]);
+  }, [ socket, status]);
 
   return (
     <div className="flex flex-col items-center justify-center h-full pt-2">
-      <div className="xs-mobile:ml-15">
+      <div className="">
         <FlashCard text={"Players"} />
       </div>
-      <ul className="list-none inline-flex self-center">
+      <div className='room-code'>
+        <FlashCard text = {`Room Code : ${sessionStorage.getItem('game-code')}`} />
+      </div>
+      <ul className="list-none inline-flex self-center justify-center items-center xs-mobile:flex-wrap md:flex-nowrap">
         {players.map((player, index) => (
-          <li key={index} className={"inline-block mt-4 p-4 xs-mobile:p-2"}>
-            <FlashCard text={player.playerName} />
+          <li key={index} className={"inline-block mt-4"}>
+            <FlashCard text={player} />
           </li>
         ))}
       </ul>

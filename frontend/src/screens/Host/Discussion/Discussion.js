@@ -22,7 +22,7 @@ const Discussion = ({ players }) => {
   const [time, setTime] = useState(120);
   const [timeFormat, setTimeFormat] = useState("0:00");
   const [timePercent, setTimePercent] = useState(0);
-  const [playerInfo, setPlayerInfo] = useState(players);
+  const [playerInfo, setPlayerInfo] = useState([]);
   const [disabled, setDisabled] = useState(true);
   const [mode, setMode] = useState(false)
   let timerID = useRef(null);
@@ -56,18 +56,19 @@ const Discussion = ({ players }) => {
   }, []);
 
   const countTime = useCallback(() => {
-    timerID.current = setInterval(() => setTimer(time), 1000);
-  }, [time, setTimer]);
+    if(!mode)
+      timerID.current = setInterval(() => setTimer(time), 1000);
+    else
+      clearInterval(timerID.current)
+  }, [time, setTimer, mode]);
 
   const pauseButton = () => {
-    clearInterval(timerID.current)
-    socket.emit('pause')
+    socket.emit('pause', sessionStorage.getItem('game-code'))
     setMode(true)
   }
 
   const resumeButton = () => {
-    timerID.current = setInterval(() => setTimer(time), 1000);
-    socket.emit('resume')
+    socket.emit('resume', sessionStorage.getItem('game-code'))
     setMode(false)
   }
 
@@ -106,9 +107,6 @@ const Discussion = ({ players }) => {
       if (sessionStorage.getItem("player-option")) {
         setPlayerInfo(JSON.parse(sessionStorage.getItem("player-option")));
       }
-      if (sessionStorage.getItem("disabled")) {
-        setDisabled(false);
-      }
     }
 
     socket.on("skipped", nextRoundNumber => {
@@ -132,7 +130,7 @@ const Discussion = ({ players }) => {
     return () => {
       clearInterval(timerID.current);
     };
-  }, [countTime, timerID, players, socket, timeC, time]);
+  }, [countTime, timerID, socket, timeC, time]);
 
   console.log(disabled);
   return (
@@ -143,7 +141,7 @@ const Discussion = ({ players }) => {
       <Timer time={timeFormat} completed={timePercent} />
       
       <div className="flex mt-2 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
-        {playerInfo.map(p => (
+        {playerInfo && playerInfo.map(p => (
           <div className="yo p-2" key={Math.random()}>
             <FlashCard text={p.playerName} />
             <ShowOptions

@@ -2,7 +2,6 @@ import React from 'react'
 import './Timer.css'
 
 const Timer = ({time, completed}) => {
-
     return (
     <div className="flex flex-col justify-center items-center">
       <div className="wrapper">

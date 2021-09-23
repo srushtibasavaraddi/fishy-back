@@ -2,3 +2,8 @@
   background: var(--primary-text);
   color: var(--btn-bg-secondary);
 }
+
+.join-btn .bg-btn-primary{
+  color: var(--primary-text);
+  border: 2px solid var(--primary-text);
+}

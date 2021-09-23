@@ -10,7 +10,7 @@ import Heading from './Heading';
 const MyCarousel = ({showRules}) => {
     const images = [rules_1, rules_2, rules_3, rules_4, rules_5]
     return (
-        <div className='flex flex-col'>
+        <div className='flex flex-col w-full h-full'>
             <div className = "inline-flex justify-end">
                 <div className = "ml-auto mr-auto inline-block">
                 <Heading text = {'Rules'} display = {'md:text-2xl xs-mobile:text-lg text-warning'} />

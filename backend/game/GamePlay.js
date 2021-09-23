@@ -1,57 +1,73 @@
-let {timer, bonusRoundArr} = require('./GameVariables')
+const { roomArrayMap } = require("./GameVariables")
 
 module.exports = (io, socket) => {
-    //Join the host room
-    const hostGameRoom = () => {
-        socket.join('Host')
-        io.to('Host').emit('timer',timer)
+    const toggleChoice = ({num, playerName, code}) => {
+        let roomObject = roomArrayMap.get(code)
+        roomObject.playerDetails.find(player => {
+            if(player.name === playerName){
+                player.toggle = num
+                player.choice = num
+                player.realChoice = 0
+            }
+        })
     }
 
-    //Join the player room
-    const playerGameRoom = () => {
-        socket.join('Players')
-        io.to('Players').emit('timer',timer)
+    const submitChoice = ({choice, playerName, code}) => {
+        let roomObject = roomArrayMap.get(code)
+        roomObject.playerDetails.find(player => {
+            if(player.name === playerName){
+                player.toggle = 0
+                player.choice = choice
+                player.realChoice = choice
+            }
+        })
+        roomObject.time = 0
+        roomObject.percent = 0
+        roomObject.timeFormat = '0:00'
+        console.log('Player Submitted choice!');
     }
 
-    //Set the timer value
-    const setGameTimer = (newTimerVal) => {
-        console.log(newTimerVal)
-        timer = newTimerVal
+    const playGame = ({code, playerName}) => {
+        socket.join(code)
+        let roomObject = roomArrayMap.get(code)
+        roomObject.playerDetails.find(player => {
+            if(player.name === playerName){
+                if(player.realChoice > 0)
+                    io.to(socket.id).emit('choice', player.choice)
+            }
+        })
+        const time = roomObject.time
+        const timeFormat = roomObject.timeFormat
+        const timePercent = roomObject.percent
+        io.to(socket.id).emit('time-values', {time, timeFormat, timePercent})
+        io.to(socket.id).emit('new-timer', roomObject.timer)
+        io.to(socket.id).emit('pause-status', roomObject.paused)
+        io.to(socket.id).emit('disabled-status', roomObject.disabled)
     }
 
-    //Set the bonus rounds value
-    const setBonusRounds = (bonusRoundString) => {
-        console.log(bonusRoundString.current)
-        bonusRoundArr = bonusRoundString
+    const timeDetails = ({timeVal, timePercentValue, timeFormatValue, code }) => {
+        let roomObject = roomArrayMap.get(code)
+        roomObject.time = timeVal
+        roomObject.percent = timePercentValue
+        roomObject.timeFormat = timeFormatValue
     }
 
-    //Redirect the player to the results page
-    const showOptions = () => {
-        io.to('Players').emit('showChoices')
+    const pause = (code) => {
+        io.in(code).emit('pause')
+        roomArrayMap.get(code).paused = true
+        roomArrayMap.get(code).disabled = true
     }
 
-    //The player joins the results room
-    const newRoom = () => {
-        socket.join('Results')
+    const resume = (code) => {
+        io.in(code).emit('resume')
+        roomArrayMap.get(code).disabled = false
+        roomArrayMap.get(code).paused = false
     }
 
-    const pauseButton = () => {
-        console.log(`Paused`);
-        io.to('Players').emit('pause')
-    }
-
-    const resumeButton = () => {
-        console.log(`Resume`);
-        io.to('Players').emit('resume')
-    }
-    
-    //Socket listeners
-    socket.on('set-timer', setGameTimer)
-    socket.on('game', hostGameRoom)
-    socket.on('options', showOptions )
-    socket.on('new-room', newRoom)
-    socket.on('join-players', playerGameRoom)
-    socket.on('set-bonus-round', setBonusRounds)
-    socket.on('pause', pauseButton)
-    socket.on('resume', resumeButton)
+    socket.on('resume', resume)
+    socket.on('pause', pause)
+    socket.on('time-details', timeDetails)
+    socket.on('join-players', playGame)
+    socket.on('toggle', toggleChoice)
+    socket.on('submit', submitChoice)
 }
