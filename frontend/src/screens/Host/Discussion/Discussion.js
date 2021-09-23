@@ -177,25 +177,26 @@ const Discussion = ({ players }) => {
             />
           </Link>
         )}
+        {!mode?
+      <Button
+              text={"Pause"}
+              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg ml-5"}
+              clickHandler = {pauseButton}
+            />
+      :
+      <Button
+              text={"Resume"}
+              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg ml-5"}
+              clickHandler = {resumeButton}
+            />
+      }
         <Button
           text={"Skip"}
           display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg ml-5"}
           clickHandler={clickHandler}
         />
       </div>
-      {!mode?
-      <Button
-              text={"Pause"}
-              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg"}
-              clickHandler = {pauseButton}
-            />
-      :
-      <Button
-              text={"Resume"}
-              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg"}
-              clickHandler = {resumeButton}
-            />
-      }
+      
       <div className="flex items-end justify-between h-full w-full">
         <DeckIcons />
       </div>
