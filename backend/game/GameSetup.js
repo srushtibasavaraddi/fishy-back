@@ -219,7 +219,6 @@ module.exports = (io, socket) => {
       player.eye = false;
       player.score = 0;
     }
-    roundNumber += 1;
     if (roundNumber < MAX_ROUNDS) {
       io.to(socket.id).emit("skipped", roundNumber);
       console.log(roundNumber);

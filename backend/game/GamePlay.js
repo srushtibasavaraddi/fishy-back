@@ -34,6 +34,16 @@ module.exports = (io, socket) => {
     const newRoom = () => {
         socket.join('Results')
     }
+
+    const pauseButton = () => {
+        console.log(`Paused`);
+        io.to('Players').emit('pause')
+    }
+
+    const resumeButton = () => {
+        console.log(`Resume`);
+        io.to('Players').emit('resume')
+    }
     
     //Socket listeners
     socket.on('set-timer', setGameTimer)
@@ -42,4 +52,6 @@ module.exports = (io, socket) => {
     socket.on('new-room', newRoom)
     socket.on('join-players', playerGameRoom)
     socket.on('set-bonus-round', setBonusRounds)
+    socket.on('pause', pauseButton)
+    socket.on('resume', resumeButton)
 }

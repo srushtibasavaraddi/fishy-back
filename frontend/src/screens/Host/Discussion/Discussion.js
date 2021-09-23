@@ -24,6 +24,7 @@ const Discussion = ({ players }) => {
   const [timePercent, setTimePercent] = useState(0);
   const [playerInfo, setPlayerInfo] = useState(players);
   const [disabled, setDisabled] = useState(true);
+  const [mode, setMode] = useState(false)
   let timerID = useRef(null);
 
   const clickHandler = () => {
@@ -57,6 +58,18 @@ const Discussion = ({ players }) => {
   const countTime = useCallback(() => {
     timerID.current = setInterval(() => setTimer(time), 1000);
   }, [time, setTimer]);
+
+  const pauseButton = () => {
+    clearInterval(timerID.current)
+    socket.emit('pause')
+    setMode(true)
+  }
+
+  const resumeButton = () => {
+    timerID.current = setInterval(() => setTimer(time), 1000);
+    socket.emit('resume')
+    setMode(false)
+  }
 
   useEffect(() => {
     socket.emit("game");
@@ -101,9 +114,11 @@ const Discussion = ({ players }) => {
     socket.on("skipped", nextRoundNumber => {
       sessionStorage.removeItem("time");
       sessionStorage.removeItem("time-format");
+      sessionStorage.removeItem('percent');
+      sessionStorage.removeItem('timeC');
       sessionStorage.removeItem("disabled");
       sessionStorage.removeItem("player-option");
-      window.location.href = `/round/${nextRoundNumber}`;
+      window.location.href = `/host/scores`;
     });
     socket.once("timer", newTime => {
       if (!timeC) {
@@ -126,6 +141,7 @@ const Discussion = ({ players }) => {
         <FlashCard text={`Round ${roundNo.id}`} />
       </div>
       <Timer time={timeFormat} completed={timePercent} />
+      
       <div className="flex mt-2 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
         {playerInfo.map(p => (
           <div className="yo p-2" key={Math.random()}>
@@ -167,6 +183,19 @@ const Discussion = ({ players }) => {
           clickHandler={clickHandler}
         />
       </div>
+      {!mode?
+      <Button
+              text={"Pause"}
+              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg"}
+              clickHandler = {pauseButton}
+            />
+      :
+      <Button
+              text={"Resume"}
+              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg"}
+              clickHandler = {resumeButton}
+            />
+      }
       <div className="flex items-end justify-between h-full w-full">
         <DeckIcons />
       </div>

@@ -32,6 +32,7 @@ const GameRounds = ({players}) => {
   const [active, setActive] = useState([false, false]);
   const [score, showScore] = useState(false);
   const [indivScore, setIndivScore] = useState([]);
+  const [pause, setPause] = useState(false)
   let timerID = useRef(null);
   let playerName = sessionStorage.getItem("playerName");
   let code = Number(sessionStorage.getItem("room"));
@@ -75,8 +76,11 @@ const GameRounds = ({players}) => {
   );
 
   const countTime = useCallback(() => {
-    timerID.current = setInterval(() => setTimer(time), 1000);
-  }, [time, setTimer]);
+    if(!pause)
+      timerID.current = setInterval(() => setTimer(time), 1000);
+    else
+      clearInterval(timerID.current)
+  }, [time, setTimer, pause]);
 
   useEffect(() => {
     socket.emit("join-players");
@@ -108,10 +112,11 @@ const GameRounds = ({players}) => {
       }
     });
     countTime();
+
     return () => {
       clearInterval(timerID.current);
     };
-  }, [countTime, socket, timerID, roundNo, playerName, timeC]);
+  }, [countTime, socket, timerID, roundNo, playerName, timeC, time]);
 
   useEffect(() => {
     socket.on("skipped", nextRoundNumber => {
@@ -129,9 +134,15 @@ const GameRounds = ({players}) => {
       } else {
         sessionStorage.setItem("scores", JSON.stringify([[0, 0, 0, 0]]));
       }
-      window.location.href = `/round/${nextRoundNumber}`;
+      window.location.href = `/player/scores`;
     });
-  }, [socket]);
+    socket.on('pause', () => {
+      setPause(true)
+    })
+    socket.on('resume', () => {
+      setPause(false)
+    })
+  }, [socket, time]);
 
   useEffect(() => {
     if (
