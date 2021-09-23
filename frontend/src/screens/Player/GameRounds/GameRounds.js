@@ -98,6 +98,12 @@ const GameRounds = ({players}) => {
       if (sessionStorage.getItem("timeC")) {
         setTimeC(true);
       }
+      if(sessionStorage.getItem('paused')){
+        setPause(JSON.parse(sessionStorage.getItem('paused')))
+      }
+      if(sessionStorage.getItem('disabled')){
+        setDisabled(JSON.parse(sessionStorage.getItem('disabled')))
+      }
       if (sessionStorage.getItem("active")) {
         setActive(JSON.parse(sessionStorage.getItem("active")));
       }
@@ -127,6 +133,8 @@ const GameRounds = ({players}) => {
       sessionStorage.removeItem("time");
       sessionStorage.removeItem("active");
       sessionStorage.removeItem("percent");
+      sessionStorage.removeItem('paused')
+      sessionStorage.removeItem('disabled')
       if (sessionStorage.getItem("scores")) {
         let scores = JSON.parse(sessionStorage.getItem("scores"));
         scores.push([0, 0, 0, 0]);
@@ -138,9 +146,15 @@ const GameRounds = ({players}) => {
     });
     socket.on('pause', () => {
       setPause(true)
+      setDisabled(true);
+      sessionStorage.setItem('paused', true)
+      sessionStorage.setItem('disabled', true)
     })
     socket.on('resume', () => {
       setPause(false)
+      setDisabled(false)
+      sessionStorage.setItem('paused', false)
+      sessionStorage.setItem('disabled', false)
     })
   }, [socket, time]);
 
