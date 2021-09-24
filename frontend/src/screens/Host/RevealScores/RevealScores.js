@@ -13,11 +13,11 @@ import DeckIcons from "../../../components/DeckIcons/DeckIcons";
 const RevealScores = () => {
   const roundNo = useParams();
   const socket = useContext(SocketContext);
-  
+  const code = sessionStorage.getItem('game-code')
   const [players, setPlayers] = useState([]);
 
   const clickHandler = playerName => {
-    socket.emit("show", playerName);
+    socket.emit("show", {playerName, code});
   };
 
   useEffect(() => {
@@ -32,18 +32,19 @@ const RevealScores = () => {
       </div>
       <div className="flex mt-4 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
         {players && players.map((player, index) => {
+          console.log(player.name);
           if (player.eye) {
             return (
               <div className="inner-div flex flex-col md:p-1" key={index}>
                 <div className="xs-mobile:w-4/6 mobile:w-full w-full self-center ml-auto mr-auto">
-                  <FlashCard text={player.playerName} />
+                  <FlashCard text={player.name} />
                 </div>
                 {player.eye ? (
                   <div key={index} className="">
                     <Icons
                       icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/eye-new.png`}
                       title={"Show"}
-                      clickHandler={() => clickHandler(player.playerName)}
+                      clickHandler={() => clickHandler(player.name)}
                     />
                   </div>
                 ) : (
@@ -51,7 +52,7 @@ const RevealScores = () => {
                     <Icons
                       icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/eye-off-new.png`}
                       title={"Hide"}
-                      clickHandler={() => clickHandler(player.playerName)}
+                      clickHandler={() => clickHandler(player.name)}
                     />
                   </div>
                 )}
@@ -70,10 +71,10 @@ const RevealScores = () => {
             return (
               <div key={index} className="inner-div flex flex-col md:p-1">
                 <div>
-                  <FlashCard text={player.playerName} />
+                  <FlashCard text={player.name} />
                   <Icons
                     icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/eye-off-new.png`}
-                    clickHandler={() => clickHandler(player.playerName)}
+                    clickHandler={() => clickHandler(player.name)}
                   />
                 </div>
                 <div className="mt-3 xs-mobile:ml-auto xs-mobile:mr-auto">

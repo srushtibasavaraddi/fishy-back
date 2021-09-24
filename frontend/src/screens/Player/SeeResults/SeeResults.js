@@ -8,18 +8,12 @@ import { useParams } from "react-router-dom";
 
 const SeeResults = () => {
   let roundNo = useParams();
-  let playerData = JSON.parse(sessionStorage.getItem("players"));
-  console.log(playerData);
-  const [players, setPlayers] = useState(playerData);
+  const [players, setPlayers] = useState([]);
   const socket = useContext(SocketContext);
   useEffect(() => {
-    if (sessionStorage.getItem("updated-players")) {
-      setPlayers(JSON.parse(sessionStorage.getItem("updated-players")));
-    }
-    socket.emit("new-room");
+    socket.emit("new-room", sessionStorage.getItem('game-code'));
     socket.on("updated-players", updatedPlayers => {
       setPlayers(updatedPlayers);
-      sessionStorage.setItem("updated-players", JSON.stringify(updatedPlayers));
     });
     socket.on(
       "come-to-scores",
@@ -38,11 +32,11 @@ const SeeResults = () => {
         <FlashCard text={`Round ${roundNo.id}`} />
       </div>
       <div className="flex mt-4 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
-        {players.map((player, index) => {
+        {players && players.map((player, index) => {
           return (
             <div className="inner-div flex flex-col md:p-1" key={index}>
               <div className="xs-mobile:w-4/6 mobile:w-full w-full self-center ml-auto mr-auto">
-                <FlashCard text={player.playerName} />
+                <FlashCard text={player.name} />
               </div>
               {player.eye ? (
                 <div className="mt-3 xs-mobile:ml-auto xs-mobile:mr-auto">

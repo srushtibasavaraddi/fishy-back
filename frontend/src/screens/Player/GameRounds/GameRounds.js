@@ -102,9 +102,7 @@ const GameRounds = () => {
     socket.on('pause-status', bool => setPause(bool))
     socket.on('disabled-status',bool => setDisabled(bool))
 
-    socket.on("showChoices", () => {
-      window.location.href = `/player/results/${roundNo.id}`;
-    });
+    socket.on("showChoices", () => window.location.href = `/player/results/${roundNo.id}`);
     
     socket.on("quitGame", () => (window.location.href = "/game"));
     countTime()
