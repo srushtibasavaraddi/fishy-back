@@ -27,10 +27,6 @@ const Discussion = ({ players }) => {
   const [mode, setMode] = useState(false)
   let timerID = useRef(null);
 
-  const clickHandler = () => {
-    socket.emit("skip-round");
-  };
-
   const setTimer = useCallback(timeValue => {
     let timeFormatValue = ''
     if (timeValue >= 0) {
@@ -163,11 +159,6 @@ const Discussion = ({ players }) => {
               clickHandler = {resumeButton}
             />
       }
-        <Button
-          text={"Skip"}
-          display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg ml-5"}
-          clickHandler={clickHandler}
-        />
       </div>
       
       <div className="flex items-end justify-between h-full w-full">

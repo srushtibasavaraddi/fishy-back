@@ -10,7 +10,6 @@ module.exports = (io, socket) => {
     }
 
     const show = ({code, playerName}) => {
-        console.log(playerName);
         let roomObject = roomArrayMap.get(code)
         for(var i in roomObject.playerDetails){
             if(roomObject.playerDetails[i].name === playerName)
@@ -24,8 +23,6 @@ module.exports = (io, socket) => {
     }
 
     const calculateScores = (players, code) => {
-        console.log(code)
-        console.log(players)
         let choices = []
         choices[1] = 0
         choices[2] = 0
@@ -58,10 +55,22 @@ module.exports = (io, socket) => {
             numberFish[1] = 0;
             numberFish[2] = -250;
           }
+          if (roomObject.roundNumber === 5) {
+            numberFish = numberFish.map(n => n * 3);
+          } else if (roomObject.roundNumber === 8) {
+            numberFish = numberFish.map(n => n * 5);
+          } else if (roomObject.roundNumber === 10) {
+            numberFish = numberFish.map(n => n * 10);
+          }
+          
         roomObject.scores[roomObject.roundNumber - 1] = []
         for (const player of players) {
-            player.score = numberFish[player.choice];  
+            if(player.choice === 0)
+              player.score = 0
+            else
+              player.score = numberFish[player.choice];   
             roomObject.scores[roomObject.roundNumber - 1].push(player.score)
+            player.indivScore.push(player.score)
         }
     }
 

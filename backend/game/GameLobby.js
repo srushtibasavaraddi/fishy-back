@@ -10,7 +10,6 @@ module.exports = (io,socket) => {
     const startGame = (gameCode) => {
         roomArrayMap.get(gameCode).playerDetails.map(player => player.time = roomArrayMap.get(gameCode).timer)
         io.to(gameCode).emit('start')
-
     }
 
     socket.on('start-game', startGame)

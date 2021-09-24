@@ -24,7 +24,8 @@ module.exports = (io, socket) => {
             hosTimeFormat : '0:00',
             hostPercent : 0,
             totalPeopleWhoSubmittedChoice : 0,
-            scores : []
+            scores : [],
+            eye : false
         })
         io.to(socket.id).emit('code', gameCode)
         console.log('The Host has created the game!');
@@ -47,7 +48,8 @@ module.exports = (io, socket) => {
             hosTimeFormat : '0:00',
             hostPercent : 0,
             totalPeopleWhoSubmittedChoice : 0,
-            scores : []
+            scores : [],
+            eye : false
         })
         io.to(socket.id).emit('refresh-code', gameCode)
     }
@@ -78,7 +80,8 @@ module.exports = (io, socket) => {
                     time : 120,
                     timeFormat : '0:00',
                     timePercent : 0,
-                    eye : false
+                    eye : false,
+                    indivScore : []
                 })
                 io.to(socket.id).emit('authenticated', 1)
             }

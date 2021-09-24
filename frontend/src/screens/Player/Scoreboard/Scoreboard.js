@@ -12,48 +12,17 @@ const Scoreboard = () => {
   const [show, setShow] = useState(false);
 
   useEffect(() => {
-    socket.emit("join-scores");
-    if (sessionStorage.getItem("curr-scores")) {
-      setScores(JSON.parse(sessionStorage.getItem("curr-scores")));
-      if (sessionStorage.getItem("curr-player-with-scores")) {
-        setPlayers(
-          JSON.parse(sessionStorage.getItem("curr-player-with-scores"))
-        );
-      }
-      if (sessionStorage.getItem("show")) {
-        setShow(JSON.parse(sessionStorage.getItem("show")));
-      }
-    }
+    socket.emit("join-scores", sessionStorage.getItem('game-code'));
     socket.on("scores", ({ scores, players }) => {
       console.log(scores, players);
       setScores(scores);
       setPlayers(players);
-      sessionStorage.setItem("curr-scores", JSON.stringify(scores));
-      sessionStorage.setItem("scores", JSON.stringify(scores));
-
-      sessionStorage.getItem(
-        "curr-player-with-scores",
-        JSON.stringify(players)
-      );
-      sessionStorage.getItem("player-with-scores", JSON.stringify(players));
     });
     socket.on("set-visible", () => {
       setShow(!show);
-      sessionStorage.setItem("show", JSON.stringify(!show));
     });
-    socket.on("new-round", () => {
-      sessionStorage.removeItem("time");
-      sessionStorage.removeItem("choice");
-      sessionStorage.removeItem("show");
-      sessionStorage.removeItem("active");
-      sessionStorage.removeItem("disabled");
-      sessionStorage.removeItem("timeC");
-      sessionStorage.removeItem("time-format");
-      sessionStorage.removeItem("updated-players");
-      sessionStorage.removeItem("curr-scores");
-      sessionStorage.removeItem("curr-player-with-scores");
-
-      window.location.href = `/round/${scoreData.length + 1}`;
+    socket.on("join-waiting", () => {
+      window.location.href = `/waiting`;
     });
     socket.on("end-game", () => {
       sessionStorage.clear()

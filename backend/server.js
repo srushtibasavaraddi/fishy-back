@@ -18,6 +18,7 @@ const GameLobby = require('./game/GameLobby')
 const GamePlay = require('./game/GamePlay')
 const GameScores = require('./game/GameScores')
 const GameResults = require('./game/GameResults')
+const GameWaitingArena = require('./game/GameWaitingArena')
 
 const onConnection = (socket) => {
     GameSetup(io, socket)
@@ -25,6 +26,7 @@ const onConnection = (socket) => {
     GamePlay(io, socket)
     GameScores(io, socket)
     GameResults(io, socket)
+    GameWaitingArena(io, socket)
 }
 
 io.on('connection', onConnection)

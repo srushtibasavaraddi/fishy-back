@@ -31,6 +31,7 @@ const GameRounds = () => {
   const [active, setActive] = useState([false, false]);
   const [score, showScore] = useState(false);
   const [pause, setPause] = useState(false)
+  const [indivScore, setIndivScore] = useState([])
   let timerID = useRef(null);
   let playerName = sessionStorage.getItem("playerName");
   let code = (sessionStorage.getItem("game-code"));
@@ -101,7 +102,7 @@ const GameRounds = () => {
     socket.on('new-timer', (newTimer) => timeP.current = newTimer)
     socket.on('pause-status', bool => setPause(bool))
     socket.on('disabled-status',bool => setDisabled(bool))
-
+    socket.on('indivScore', indivScore => setIndivScore(indivScore))
     socket.on("showChoices", () => window.location.href = `/player/results/${roundNo.id}`);
     
     socket.on("quitGame", () => (window.location.href = "/game"));
@@ -219,9 +220,58 @@ const GameRounds = () => {
             fontWeight: `700`,
           }}
         >
+          {indivScore && indivScore.reduce((acc, value) => {
+            return acc + value;
+          }, 0)}
         </p>
       </div>
       <DeckIcons />
+      {score ? (
+        <Modal>
+          <div className="inline-flex justify-end w-full relative">
+            <div className="inline-flex self-start mr-auto">
+              <img
+                src={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/coins.png`}
+                alt="coins"
+              />
+              <div className="self-end ml-1 mr-auto">
+                <p style={{ color: `var(--primary-text)`, fontWeight: `500` }}>
+                  {indivScore.reduce((acc, value) => {
+                    return acc + value;
+                  }, 0)}
+                </p>
+              </div>
+            </div>
+          </div>
+          <ul className="scores">
+            <li className="titles grid-display">
+              {indivScore.map((value, index) => {
+                return (
+                  <p key={index} className="grid-item">
+                    {`# ${index + 1}`}
+                  </p>
+                );
+              })}
+            </li>
+            <li className="grid-display">
+              {indivScore.map((value, index) => {
+                return (
+                  <p key={index} className="grid-display-item">
+                    {value}
+                  </p>
+                );
+              })}
+            </li>
+          </ul>
+          <div className="close-btn">
+            <Icons
+              icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/cross.png`}
+              title={"Quit"}
+              clickHandler={() => showScore(!score)}
+            />
+          </div>
+        </Modal>
+      ) : null}
     </div>
   );
 };

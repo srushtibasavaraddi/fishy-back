@@ -43,6 +43,7 @@ module.exports = (io, socket) => {
                 const timeFormat = player.timeFormat
                 const timePercent = player.percent 
                 io.to(socket.id).emit('time-values', {time, timeFormat, timePercent})
+                io.to(socket.id).emit('indivScore', player.indivScore)
             }
         })
 

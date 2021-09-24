@@ -2,35 +2,6 @@ import React, { useEffect } from "react";
 import "./Scores.css";
 
 const Scores = ({ show, scores, players }) => {
-  // const [scores, setScores] = useState([]);
-  // useEffect(() => {
-  //   let tempScores = [];
-  //   if (sessionStorage.getItem("cal-scores")) {
-  //     tempScores = JSON.parse(sessionStorage.getItem("cal-scores"));
-  //   }
-  //   tempScores.push([0, 0, 0, 0]);
-  //   if (tempScores.length > 0 && gameScores.length > 0) {
-  //     for (let i = 0; i < 4; i++) {
-  //       if (tempScores.length === 5) {
-  //         tempScores[tempScores.length - 1][i] =
-  //           gameScores[gameScores.length - 1][i] * 3;
-  //       } else if (tempScores.length === 8) {
-  //         tempScores[tempScores.length - 1][i] =
-  //           gameScores[gameScores.length - 1][i] * 5;
-  //       } else if (tempScores.length === 10) {
-  //         tempScores[tempScores.length - 1][i] =
-  //           gameScores[gameScores.length - 1][i] * 10;
-  //       } else {
-  //         tempScores[tempScores.length - 1][i] =
-  //           gameScores[gameScores.length - 1][i];
-  //       }
-  //     }
-  //     console.log("final output", tempScores[tempScores.length - 1]);
-  //     sessionStorage.setItem("cal-scores", JSON.stringify(tempScores));
-  //     setScores(tempScores);
-  //   }
-  // }, [gameScores]);
-
   useEffect(() => {
     const ele = document.querySelector(".active");
     if (ele) {
@@ -47,13 +18,13 @@ const Scores = ({ show, scores, players }) => {
         {players.map((player, index) => {
           return (
             <p key={index} className="grid-display-item">
-              {player.playerName}
+              {player.name}
             </p>
           );
         })}
         {show ? <p className="grid-display-item display">Round Total</p> : null}
       </li>
-      {scores.map((score, index) => {
+      {scores && scores.map((score, index) => {
         let row = 0;
         if (index === scores.length - 1) {
           return (
@@ -76,7 +47,7 @@ const Scores = ({ show, scores, players }) => {
               ) : (
                 <p className="grid-display-item">{`#${index + 1}`}</p>
               )}
-              {score.map((indivScore, ind) => {
+              {score && score.map((indivScore, ind) => {
                 total[ind] += indivScore;
                 row += indivScore;
                 rowScore += indivScore;
@@ -112,7 +83,7 @@ const Scores = ({ show, scores, players }) => {
             ) : (
               <p className="grid-display-item">{`#${index + 1}`}</p>
             )}
-            {score.map((indivScore, ind) => {
+            {score && score.map((indivScore, ind) => {
               total[ind] += indivScore;
               row += indivScore;
               rowScore += indivScore;

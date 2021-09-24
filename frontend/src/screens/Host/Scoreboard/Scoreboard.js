@@ -14,29 +14,19 @@ const Scoreboard = () => {
   const [playerData, setPlayers] = useState([]);
   const clickHandler = () => {
     setShow(!show);
-    socket.emit("set-visible");
-  };
+    socket.emit("set-visible", sessionStorage.getItem('game-code'));
+  }
 
   useEffect(() => {
-    socket.emit("show-scores");
-    socket.emit("get-scores");
+    socket.emit("show-scores", sessionStorage.getItem('game-code'));
     socket.on("scores", ({ scores, players }) => {
-      console.log(scores);
       setScores(scores);
       setPlayers(players);
     });
   }, [socket]);
 
   const clickHandler2 = () => {
-    socket.emit("next-round");
-    sessionStorage.removeItem("update-players");
-    sessionStorage.removeItem("time");
-    sessionStorage.removeItem("time-format");
-    sessionStorage.removeItem("percent");
-    sessionStorage.removeItem("player-option");
-    sessionStorage.removeItem("timeC");
-    sessionStorage.removeItem("disabled");
-
+    socket.emit("waiting-arena", sessionStorage.getItem('game-code'));
   };
 
   return (
@@ -62,7 +52,7 @@ const Scoreboard = () => {
       </div>
       <Link
         to={{
-          pathname: `/round/${scoreData.length + 1}`,
+          pathname: `/waiting`,
           state: {
             value: { playerData },
           },
