@@ -108,6 +108,13 @@ module.exports = (io, socket) => {
         }
     }
 
+    const quitGame = (code) => {
+        console.log(`Quit Game called!`);
+        io.in(code).emit('quit-game')
+    }
+
+    socket.on('quitGame', quitGame)
+
     socket.on('join-host', playGameAsHost)
     socket.on('resume', resume)
     socket.on('pause', pause)

@@ -63,6 +63,8 @@ module.exports = (io, socket) => {
     }
 
     const authenticate = ({inputCode, playerName}) => {
+        inputCode = inputCode.trim()
+        if(roomArrayMap.get(inputCode).players.length < 4){
         if(roomArrayMap.get(inputCode))
         {
             let roomObject = roomArrayMap.get(inputCode)
@@ -88,6 +90,10 @@ module.exports = (io, socket) => {
         }
         else
             io.to(socket.id).emit('authenticated', 0)
+        }
+        else{
+            io.to(socket.id).emit('error', {message : 'Max players have joined. Sorry, wait till the next game starts!'})
+        }
     }
 
     socket.on('authenticate', authenticate)

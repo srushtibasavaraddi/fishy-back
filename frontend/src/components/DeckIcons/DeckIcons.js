@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import Icons from "../Icons/Icons";
 import Modal from "../Modal/Modal";
-import FlashCard from "../Flashcard/Flashcard";
 import { SocketContext } from "../../context/SocketContext";
 import Heading from "../Heading";
 import Button from "../Button";
@@ -21,7 +20,7 @@ const DeckIcons = () => {
   };
 
   const reallyQuitGame = () => {
-    socket.emit("quitGame");
+    socket.emit("quitGame", sessionStorage.getItem('game-code'));
     sessionStorage.clear();
     localStorage.clear();
     window.location.href = "/game";
@@ -50,9 +49,6 @@ const DeckIcons = () => {
       {rules ? (
         <Modal>
           <div className="inline-flex justify-end w-full">
-            <div className="inline-block ml-auto mr-auto">
-              <FlashCard text={"Rules"} />
-            </div>
             <div className="inline-block">
               <button
                 onClick={() => showRules(false)}
@@ -75,7 +71,9 @@ const DeckIcons = () => {
         <Modal>
           <div className="inline-flex justify-end w-full">
             <div className="inline-block ml-auto mr-auto">
-              <FlashCard text={"Quit?"} />
+              <Heading text={"Quit?"}
+              display={`text-warning text-4xl font-bold`}
+              />
             </div>
             <div className="inline-block">
               <button
@@ -96,7 +94,7 @@ const DeckIcons = () => {
             <div>
               <Button
                 clickHandler={reallyQuitGame}
-                display={"btn btn-primary btn-lg"}
+                display={"btn bg-btn-bg-primary btn-lg text-warning border-2 border-yellow"}
                 text={"Quit"}
               />
             </div>

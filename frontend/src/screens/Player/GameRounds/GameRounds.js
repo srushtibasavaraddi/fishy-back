@@ -42,9 +42,7 @@ const GameRounds = () => {
       if (timeValue > 0) {
         const min = Math.floor(timeValue / 60);
         const second = Math.floor(timeValue % 60);
-        console.log(timeP.current);
         let originalTime = timeP.current;
-        console.log('originalTime : ',originalTime);
         const percent = 100 - ((originalTime - timeValue) / originalTime) * 100;
         if (second >= 0 && second <= 9) {
           timeFormatValue = (`${min}:0${second}`)
@@ -53,7 +51,6 @@ const GameRounds = () => {
           setTimeFormat(`${min}:${second}`);
           timeFormatValue = (`${min}:${second}`)
         }
-        console.log(timeValue);
         setTime(timeValue - 1);
         setTimePercent(percent);
         const timeVal = timeValue - 1
@@ -93,7 +90,6 @@ const GameRounds = () => {
       setChoice(choice)
     })
     socket.on('time-values', ({time, timeFormat, timePercent}) => {
-      console.log(time);
       setTime(time)
       setTimePercent(timePercent)
       setTimeFormat(timeFormat)
@@ -105,7 +101,9 @@ const GameRounds = () => {
     socket.on('indivScore', indivScore => setIndivScore(indivScore))
     socket.on("showChoices", () => window.location.href = `/player/results/${roundNo.id}`);
     
-    socket.on("quitGame", () => (window.location.href = "/game"));
+    socket.on("quit-game", () => {
+      console.log('Hi');
+      (window.location.href = "/game")});
     countTime()
 
     return () => {

@@ -19,7 +19,8 @@ const SeeResults = () => {
       "come-to-scores",
       () => (window.location.href = "/player/scores")
     );
-    socket.on("quitGame", () => {
+
+    socket.on("quit-game", () => {
       sessionStorage.clear();
       localStorage.clear();
       window.location.href = "/game";
