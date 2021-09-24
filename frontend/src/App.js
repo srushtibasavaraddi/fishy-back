@@ -17,6 +17,7 @@ import SeeResults from './screens/Player/SeeResults/SeeResults';
 import Scoreboard from './screens/Host/Scoreboard/Scoreboard';
 import PlayerScoreboard from './screens/Player/Scoreboard/Scoreboard';
 import Endgame from './screens/Endgame/Endgame';
+import Waiting from './screens/Waiting/Waiting';
 
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route path= '/admin/link' exact component = {GenerateLink} />
           <Route path= '/Rules' exact component = {Carousel} />
           <Route path= '/lobby/:id' component = {Lobby} />
+          <Route path = '/waiting' component = {Waiting} />
           <Route path = '/round/:id' component = {Game} />
           <Route path = '/host/results/:id' component = {RevealScores} />
           <Route path = '/player/results/:id' component = {SeeResults} />

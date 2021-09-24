@@ -1,4 +1,4 @@
-import React, { useState, useContext, useEffect, useRef } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import FlashCard from "../../../components/Flashcard/Flashcard";
 import ShowOptions from "../ShowOptions/ShowOptions";
 import Fish1 from "../../../images/Fish1-new.png";
@@ -10,34 +10,19 @@ import Button from "../../../components/Button";
 import { Link, useParams } from "react-router-dom";
 import DeckIcons from "../../../components/DeckIcons/DeckIcons";
 
-const RevealScores = props => {
+const RevealScores = () => {
   const roundNo = useParams();
   const socket = useContext(SocketContext);
-  let playerData = useRef([]);
-
-  if (Number(sessionStorage.getItem("status")) === 1) {
-    playerData.current = props.location.state.value.playerInfo;
-    sessionStorage.setItem("player-data", JSON.stringify(playerData.current));
-  }
-  const [players, setPlayers] = useState(playerData.current);
+  
+  const [players, setPlayers] = useState([]);
 
   const clickHandler = playerName => {
-    console.log(playerData.current, "hi");
-    console.log(playerName);
     socket.emit("show", playerName);
   };
 
   useEffect(() => {
-    if (sessionStorage.getItem("update-players")) {
-      console.log(JSON.parse(sessionStorage.getItem("update-players")));
-      setPlayers(JSON.parse(sessionStorage.getItem("update-players")));
-    }
-    socket.emit("options", Number(sessionStorage.getItem("room")));
-    socket.on("updated-players", updatedPlayers => {
-      setPlayers(updatedPlayers);
-      console.log(updatedPlayers);
-      sessionStorage.setItem("update-players", JSON.stringify(updatedPlayers));
-    });
+    socket.emit("options", (sessionStorage.getItem("game-code")));
+    socket.on("updated-players", updatedPlayers => setPlayers(updatedPlayers))
   }, [socket]);
 
   return (
@@ -46,7 +31,7 @@ const RevealScores = props => {
         <FlashCard text={`Round ${roundNo.id}`} />
       </div>
       <div className="flex mt-4 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
-        {players.map((player, index) => {
+        {players && players.map((player, index) => {
           if (player.eye) {
             return (
               <div className="inner-div flex flex-col md:p-1" key={index}>

@@ -18,19 +18,18 @@ import Fish1 from "../../../images/Fish1-new.png";
 import Fish2 from "../../../images/Fish2-new.png";
 import "./GameRounds.css";
 
-const GameRounds = ({players}) => {
-  let timeP = useRef(120);
+const GameRounds = () => {
+  let timeP = useRef();
   const roundNo = useParams();
   let multiplier = useRef(0)
   const socket = useContext(SocketContext);
-  const [time, setTime] = useState(120);
-  const [timeFormat, setTimeFormat] = useState("0:00");
-  const [timePercent, setTimePercent] = useState(0);
+  const [time, setTime] = useState();
+  const [timeFormat, setTimeFormat] = useState();
+  const [timePercent, setTimePercent] = useState();
   const [choice, setChoice] = useState(1);
   const [disabled, setDisabled] = useState(false);
   const [active, setActive] = useState([false, false]);
   const [score, showScore] = useState(false);
-  const [indivScore, setIndivScore] = useState([]);
   const [pause, setPause] = useState(false)
   let timerID = useRef(null);
   let playerName = sessionStorage.getItem("playerName");
@@ -42,6 +41,7 @@ const GameRounds = ({players}) => {
       if (timeValue > 0) {
         const min = Math.floor(timeValue / 60);
         const second = Math.floor(timeValue % 60);
+        console.log(timeP.current);
         let originalTime = timeP.current;
         console.log('originalTime : ',originalTime);
         const percent = 100 - ((originalTime - timeValue) / originalTime) * 100;
@@ -58,14 +58,14 @@ const GameRounds = ({players}) => {
         const timeVal = timeValue - 1
         const timePercentValue = percent
         
-        socket.emit('time-details',{timeVal, timePercentValue, timeFormatValue, code})
+        socket.emit('player-time-details',{timeVal, timePercentValue, timeFormatValue, code, playerName})
       } else {
         clearInterval(timerID.current);
         if (!disabled) {
           socket.emit("submit", { choice, playerName, code });
         }
         const timeVal = 0, timePercentValue = 0, timeFormatValue = '0:00'
-        socket.emit('time-details',{timeVal, timePercentValue, timeFormatValue, code})
+        socket.emit('player-time-details',{timeVal, timePercentValue, timeFormatValue, code, playerName})
         setDisabled(true);
         setTime(0);
         Number(choice) === 1
@@ -92,6 +92,7 @@ const GameRounds = ({players}) => {
       setChoice(choice)
     })
     socket.on('time-values', ({time, timeFormat, timePercent}) => {
+      console.log(time);
       setTime(time)
       setTimePercent(timePercent)
       setTimeFormat(timeFormat)
@@ -99,7 +100,7 @@ const GameRounds = ({players}) => {
 
     socket.on('new-timer', (newTimer) => timeP.current = newTimer)
     socket.on('pause-status', bool => setPause(bool))
-    socket.on('disable-status',bool => setDisabled(bool))
+    socket.on('disabled-status',bool => setDisabled(bool))
 
     socket.on("showChoices", () => {
       window.location.href = `/player/results/${roundNo.id}`;
@@ -114,17 +115,6 @@ const GameRounds = ({players}) => {
   }, [countTime, socket, timerID, roundNo, playerName, time, code]);
 
   useEffect(() => {
-    socket.on("skipped", nextRoundNumber => {
-      console.log(nextRoundNumber);
-      if (sessionStorage.getItem("scores")) {
-        let scores = JSON.parse(sessionStorage.getItem("scores"));
-        scores.push([0, 0, 0, 0]);
-        sessionStorage.setItem("scores", JSON.stringify(scores));
-      } else {
-        sessionStorage.setItem("scores", JSON.stringify([[0, 0, 0, 0]]));
-      }
-      window.location.href = `/player/scores`;
-    });
     socket.on('pause', () => {
       setPause(true)
       setDisabled(true);
@@ -143,7 +133,8 @@ const GameRounds = ({players}) => {
     socket.emit("toggle", { num, playerName, code });
   };
 
-  const submitChoice = e => {
+  const submitChoice = () => {
+    console.log('Didn');
     socket.emit("submit", { choice, playerName, code });
     clearInterval(timerID);
     setTime(0);
@@ -160,6 +151,7 @@ const GameRounds = ({players}) => {
       setActive([false, false]);
     }
   };
+
   if(Number(roundNo.id) === 5){
     multiplier.current = 3
   }
@@ -169,6 +161,7 @@ const GameRounds = ({players}) => {
   else if(Number(roundNo.id) === 10){
     multiplier.current = 10
   }
+
   return (
     <div className="p-1 mt-1 flex flex-col h-screen game">
       <div className="flex flex-col items-center justify-center">
@@ -228,57 +221,8 @@ const GameRounds = ({players}) => {
             fontWeight: `700`,
           }}
         >
-          {indivScore.reduce((acc, value) => {
-            return acc + value;
-          }, 0)}
         </p>
       </div>
-      {score ? (
-        <Modal>
-          <div className="inline-flex justify-end w-full relative">
-            <div className="inline-flex self-start mr-auto">
-              <img
-                src={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/coins.png`}
-                alt="coins"
-              />
-              <div className="self-end ml-1 mr-auto">
-                <p style={{ color: `var(--primary-text)`, fontWeight: `500` }}>
-                  {indivScore.reduce((acc, value) => {
-                    return acc + value;
-                  }, 0)}
-                </p>
-              </div>
-            </div>
-          </div>
-          <ul className="scores">
-            <li className="titles grid-display">
-              {indivScore.map((value, index) => {
-                return (
-                  <p key={index} className="grid-item">
-                    {`# ${index + 1}`}
-                  </p>
-                );
-              })}
-            </li>
-            <li className="grid-display">
-              {indivScore.map((value, index) => {
-                return (
-                  <p key={index} className="grid-display-item">
-                    {value}
-                  </p>
-                );
-              })}
-            </li>
-          </ul>
-          <div className="close-btn">
-            <Icons
-              icon={`https://ik.imagekit.io/sjbtmukew5p/Fishy_Equilibrium/cross.png`}
-              title={"Quit"}
-              clickHandler={() => showScore(!score)}
-            />
-          </div>
-        </Modal>
-      ) : null}
       <DeckIcons />
     </div>
   );

@@ -16,9 +16,9 @@ import DeckIcons from "../../..//components/DeckIcons/DeckIcons";
 
 const Discussion = ({ players }) => {
   const roundNo = useParams();
+  const code = sessionStorage.getItem('game-code')
   const timeP = useRef(120);
   const socket = useContext(SocketContext);
-  const [timeC, setTimeC] = useState(false);
   const [time, setTime] = useState(120);
   const [timeFormat, setTimeFormat] = useState("0:00");
   const [timePercent, setTimePercent] = useState(0);
@@ -32,6 +32,7 @@ const Discussion = ({ players }) => {
   };
 
   const setTimer = useCallback(timeValue => {
+    let timeFormatValue = ''
     if (timeValue >= 0) {
       const min = Math.floor(timeValue / 60);
       const second = Math.floor(timeValue % 60);
@@ -39,21 +40,25 @@ const Discussion = ({ players }) => {
       const percent = 100 - ((originalTime - timeValue) / originalTime) * 100;
       if (second >= 0 && second <= 9) {
         setTimeFormat(`${min}:0${second}`);
+        timeFormatValue = (`${min}:0${second}`)
       } else {
         setTimeFormat(`${min}:${second}`);
+        timeFormatValue = (`${min}:${second}`)
       }
       setTime(timeValue - 1);
-      sessionStorage.setItem("time", timeValue - 1);
-      sessionStorage.setItem("percent", percent);
       setTimePercent(percent);
+      const timeVal = timeValue - 1
+      const timePercentValue = percent
+      socket.emit('host-time-details',{timeVal, timePercentValue, timeFormatValue, code})
+
     } else {
       clearInterval(timerID);
       setTime(0);
-      sessionStorage.setItem("time", 0);
       setTimeFormat("0:00");
-      sessionStorage.setItem("time-format", "0:00");
+      const timeVal = 0, timePercentValue = 0, timeFormatValue = '0:00'
+      socket.emit('host-time-details',{timeVal, timePercentValue, timeFormatValue, code})
     }
-  }, []);
+  }, [code, socket]);
 
   const countTime = useCallback(() => {
     if(!mode)
@@ -73,66 +78,36 @@ const Discussion = ({ players }) => {
   }
 
   useEffect(() => {
-    socket.emit("game");
+    socket.emit("join-host", code);
     socket.on("toggled", playerData => {
-      sessionStorage.setItem("player-option", JSON.stringify(playerData));
       setPlayerInfo(playerData);
     });
     socket.on("chosen", playerData => {
-      sessionStorage.setItem("player-option", JSON.stringify(playerData));
       setPlayerInfo(playerData);
     });
+    socket.on('time-values', ({time, timeFormat, timePercent}) => {
+      setTime(time)
+      setTimePercent(timePercent)
+      setTimeFormat(timeFormat)
+    })
     socket.on("stop-timer", () => {
       setTimeFormat("0:00");
       setTimePercent(0);
       setTime(0);
-      sessionStorage.setItem("time", 0);
-      sessionStorage.setItem("time-format", "0:00");
-      sessionStorage.setItem("percent", 0);
       setDisabled(false);
-      sessionStorage.setItem("disabled", false);
     });
-    if (sessionStorage.getItem("time")) {
-      setTime(Number(sessionStorage.getItem("time")));
-      if (sessionStorage.getItem("time-format")) {
-        console.log(time);
-        setTimeFormat(sessionStorage.getItem("time-format"));
-      }
-      if (sessionStorage.getItem("percent")) {
-        setTimePercent(sessionStorage.getItem("percent"));
-      }
-      if (sessionStorage.getItem("timeC")) {
-        setTimeC(true);
-      }
-      if (sessionStorage.getItem("player-option")) {
-        setPlayerInfo(JSON.parse(sessionStorage.getItem("player-option")));
-      }
-    }
+    socket.on('new-timer', newTimer => timeP.current = newTimer)
 
-    socket.on("skipped", nextRoundNumber => {
-      sessionStorage.removeItem("time");
-      sessionStorage.removeItem("time-format");
-      sessionStorage.removeItem('percent');
-      sessionStorage.removeItem('timeC');
-      sessionStorage.removeItem("disabled");
-      sessionStorage.removeItem("player-option");
-      window.location.href = `/host/scores`;
-    });
-    socket.once("timer", newTime => {
-      if (!timeC) {
-        setTime(newTime);
-        setTimeC(true);
-        timeP.current = newTime;
-      }
-    });
+    socket.on('pause-status', bool => setMode(bool))
+    socket.on('player-values', players => setPlayerInfo(players))
+
     countTime();
 
     return () => {
       clearInterval(timerID.current);
     };
-  }, [countTime, timerID, socket, timeC, time]);
+  }, [countTime, timerID, socket, time, code]);
 
-  console.log(disabled);
   return (
     <div className="p-1 mt-1 flex flex-col justify-center items-center h-screen">
       <div className="md:w-96 xs-mobile:w-9/12">
@@ -143,7 +118,7 @@ const Discussion = ({ players }) => {
       <div className="flex mt-2 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
         {playerInfo && playerInfo.map(p => (
           <div className="yo p-2" key={Math.random()}>
-            <FlashCard text={p.playerName} />
+            <FlashCard text={p.name} />
             <ShowOptions
               fishes={Fish1and2}
               choice={p.choice}

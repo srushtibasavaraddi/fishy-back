@@ -44,7 +44,7 @@ const Lobby = () => {
       </div>
       <ul className="list-none inline-flex self-center justify-center items-center xs-mobile:flex-wrap md:flex-nowrap">
         {players.map((player, index) => (
-          <li key={index} className={"inline-block mt-4"}>
+          <li key={index} className={"inline-block mt-4 p-3"}>
             <FlashCard text={player} />
           </li>
         ))}

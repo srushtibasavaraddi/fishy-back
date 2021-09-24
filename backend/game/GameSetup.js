@@ -16,13 +16,15 @@ module.exports = (io, socket) => {
         roomArrayMap.set(gameCode , {
             players : [],
             timer : 120,
-            time : 120,
-            interval : '',
-            timeFormat : '0:00',
             playerDetails : [],
-            percent : 0,
             paused : false,
-            disabled : false
+            hostDisabled : false,
+            roundNumber : 1,
+            hostTime : 120,
+            hosTimeFormat : '0:00',
+            hostPercent : 0,
+            totalPeopleWhoSubmittedChoice : 0
+
         })
         io.to(socket.id).emit('code', gameCode)
         console.log('The Host has created the game!');
@@ -34,25 +36,27 @@ module.exports = (io, socket) => {
         {
             gameCode = genRanHex(6)
         }
-        roomArrayMap.set(gameCode, {
+        roomArrayMap.set(gameCode , {
             players : [],
             timer : 120,
             playerDetails : [],
-            interval : '',
-            time : 120,
-            timeFormat : '0:00',
-            percent : 0,
-            paused : false, 
-            disabled : false
+            paused : false,
+            hostDisabled : false,
+            roundNumber : 1,
+            hostTime : 120,
+            hosTimeFormat : '0:00',
+            hostPercent : 0,
+            totalPeopleWhoSubmittedChoice : 0
         })
         io.to(socket.id).emit('refresh-code', gameCode)
     }
 
     const setTimer = ({timer, gameCode}) => {
         console.log(gameCode);
+        console.log(timer);
         let roomObject = roomArrayMap.get(gameCode)
         roomObject.timer = timer
-        roomObject.time = timer
+        roomObject.hostTime = timer
     }
 
     const authenticate = ({inputCode, playerName}) => {
@@ -68,7 +72,11 @@ module.exports = (io, socket) => {
                     name : playerName,
                     toggle : 0,
                     choice : 0,
-                    realChoice : 0
+                    realChoice : 0,
+                    disabled : false,
+                    time : 120,
+                    timeFormat : '0:00',
+                    timePercent : 0
                 })
                 io.to(socket.id).emit('authenticated', 1)
             }
