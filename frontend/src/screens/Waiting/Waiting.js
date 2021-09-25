@@ -37,7 +37,7 @@ const Waiting = () => {
             {status === '1'?<FlashCard text = {'Select'} /> : <FlashCard text = {'Waiting for the host to start the round'} />}
             </div>
             {status === '1'?
-            roundNo < 10?
+            roundNo < 11?
             <div className='flex flex-row pt-10'>
                 <div>
                     <Button text = {`Start Round ${roundNo}`} display = {'bg-btn-bg-primary text-warning p-4'} clickHandler = {startGame} />  
