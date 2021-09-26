@@ -1,0 +1,23 @@
+{
+  "name": "fishyequilibrium",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-server": "npm run server --prefix backend"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rfawesome21/FishyEquilibrium.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/rfawesome21/FishyEquilibrium/issues"
+  },
+  "homepage": "https://github.com/rfawesome21/FishyEquilibrium#readme",
+  "dependencies": {
+    "nodemon": "^2.0.13"
+  }
+}
