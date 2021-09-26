@@ -11,10 +11,12 @@ const PlayerScreen = () => {
   useEffect(() => {
     sessionStorage.setItem("status", 0);
     socket.on('error', ({message}) => {
-    alert(message)
-    window.location.href = '/'
+      if(!code){
+        alert(message)
+        correctCode(true)
+      }
     })
-  }, [socket]);
+  }, [socket, code]);
 
   const handlegameLink = e => {
     setInputCode(e.target.value);
