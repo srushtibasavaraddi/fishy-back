@@ -63,6 +63,14 @@ module.exports = (io, socket) => {
     }
 
     const authenticate = ({inputCode, playerName}) => {
+        if(!playerName || !inputCode){
+            io.to(socket.id).emit('error', {message : 'Please fill all the fields before proceeding'})
+            return
+        }
+        if(playerName.length > 10){
+            io.to(socket.id).emit('error', {message : 'Your username should only be 10 characters long'})
+            return
+        }
         inputCode = inputCode.trim()
         if(roomArrayMap.get(inputCode).players.length < 4){
         if(roomArrayMap.get(inputCode))
