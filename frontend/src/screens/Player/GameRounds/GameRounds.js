@@ -158,7 +158,7 @@ const GameRounds = () => {
     <div className="p-1 mt-1 flex flex-col h-screen game">
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row md:w-96 xs-mobile:w-9/12">
-          <FlashCard text={`Round ${roundNo.id}`} />
+          <FlashCard text={`Day ${roundNo.id}`} />
           {Number(roundNo.id) === 5 || Number(roundNo.id) === 8 || Number(roundNo.id) === 10? <p className='multiplier text-center p-2 w-16'>x {multiplier.current}</p> : null}
         </div>
         <Timer time={timeFormat} completed={timePercent} />

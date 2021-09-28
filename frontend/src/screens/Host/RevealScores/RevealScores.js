@@ -28,7 +28,7 @@ const RevealScores = () => {
   return (
     <div className="flex flex-col items-center justify-center pt-1 h-screen reveal">
       <div className="md:w-96 xs-mobile:w-9/12">
-        <FlashCard text={`Round ${roundNo.id}`} />
+        <FlashCard text={`Day ${roundNo.id}`} />
       </div>
       <div className="flex mt-4 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
         {players && players.map((player, index) => {

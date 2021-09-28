@@ -69,9 +69,12 @@ const Waiting = () => {
             <div className='bg-card bg-no-repeat bg-cover'>
             {(roundNo === 5 || roundNo === 8 || roundNo === 10) && (status === '1')?
             <div className='flex flex-col w-full justify-center items-center pt-3'>
+                <h1 className='text-2xl text-warning font-bold px-4'>
+                {!active? 'Start the discussion for team leaders!' : 'Discussion started!'}
+                </h1>
                 <button onClick = {() => {
                     sessionStorage.setItem('active', !active)
-                    setActive(!active)}} className='text-warning self-center text-8xl bg-black rounded-xl px-2 py-2'>
+                    setActive(!active)}} className='text-warning self-center text-8xl bg-black rounded-full px-3 py-3'>
                     {timeFormat}
                 </button>
             </div> 
@@ -80,12 +83,12 @@ const Waiting = () => {
             }
             {status === '1'?
             roundNo < 11 ?
-            <div className='flex flex-row py-10 px-10'>
+            <div className='flex flex-row justify-center items-center py-10 px-10 w-full'>
                 <div>
-                    <button onClick = {startGame} className='skip-btn btn-lg'>{`Start Round ${roundNo}`}</button>
+                    <button onClick = {startGame} className='skip-btn btn-lg'>{`Go to Day ${roundNo}`}</button>
                 </div>
                 <div>
-                <button onClick = {skipGameRound} className='skip-btn btn-lg ml-5'>{`Skip Round ${roundNo}`}</button>
+                <button onClick = {skipGameRound} className='skip-btn btn-lg ml-5'>{`Skip Day ${roundNo}`}</button>
                 </div>
             </div>
              : 

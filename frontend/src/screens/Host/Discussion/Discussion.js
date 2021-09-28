@@ -13,8 +13,12 @@ import { SocketContext } from "../../../context/SocketContext";
 import Fish1and2 from "../../../images/Fish1and2.png";
 import ShowOptions from "../ShowOptions/ShowOptions";
 import DeckIcons from "../../..//components/DeckIcons/DeckIcons";
+import Pause from '../../../images/pause.png'
+import Resume from '../../../images/resume.png'
+import Icons from "../../../components/Icons/Icons";
+import './Discussion.css'
 
-const Discussion = ({ players }) => {
+const Discussion = () => {
   const roundNo = useParams();
   const code = sessionStorage.getItem('game-code')
   const timeP = useRef(120);
@@ -105,10 +109,26 @@ const Discussion = ({ players }) => {
   return (
     <div className="p-1 mt-1 flex flex-col justify-center items-center h-screen">
       <div className="md:w-96 xs-mobile:w-9/12">
-        <FlashCard text={`Round ${roundNo.id}`} />
+        <FlashCard text={`Day ${roundNo.id}`} />
       </div>
+      <div className='flex flex-row w-full justify-center items-center'>
+        <div>
       <Timer time={timeFormat} completed={timePercent} />
-      
+      </div>
+      <div className='pause-button ml-3.5'>
+      {!mode?
+      <Icons
+      clickHandler = {pauseButton}
+      icon = {Pause}
+      />
+      :
+      <Icons
+      clickHandler = {resumeButton}
+      icon = {Resume}
+      />
+      }
+      </div>
+      </div>
       <div className="flex mt-2 xs-mobile:flex-wrap md:flex-nowrap justify-center items-center">
         {playerInfo && playerInfo.map(p => (
           <div className="yo p-2" key={Math.random()}>
@@ -144,19 +164,7 @@ const Discussion = ({ players }) => {
             />
           </Link>
         )}
-        {!mode?
-      <Button
-              text={"Pause"}
-              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg ml-5"}
-              clickHandler = {pauseButton}
-            />
-      :
-      <Button
-              text={"Resume"}
-              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg ml-5"}
-              clickHandler = {resumeButton}
-            />
-      }
+        
       </div>
       
       <div className="flex items-end justify-between h-full w-full">
