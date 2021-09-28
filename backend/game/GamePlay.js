@@ -20,10 +20,6 @@ module.exports = (io, socket) => {
                 player.choice = choice
                 player.realChoice = choice
                 player.disabled = true
-                player.time = 0
-                player.timeFormat = '0:00'
-                player.percent = 0
-
             }
         })
         roomObject.totalPeopleWhoSubmittedChoice += 1
@@ -114,7 +110,6 @@ module.exports = (io, socket) => {
     }
 
     socket.on('quitGame', quitGame)
-
     socket.on('join-host', playGameAsHost)
     socket.on('resume', resume)
     socket.on('pause', pause)

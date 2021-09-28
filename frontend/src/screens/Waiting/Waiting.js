@@ -1,13 +1,25 @@
-import React, { useContext, useEffect, useState } from 'react'
+import React, { useContext, useEffect, useRef, useState } from 'react'
 import Button from '../../components/Button'
-import FlashCard from '../../components/Flashcard/Flashcard'
 import { SocketContext } from '../../context/SocketContext'
+import './Waiting.css'
 
 const Waiting = () => {
     const status = sessionStorage.getItem('status')
     const socket = useContext(SocketContext)
     const [roundNo, setRoundNo] = useState(0)
+    const [timeFormat, setTimeFormat] = useState('03:00')
+    const timerRef = useRef()
+    const [active, setActive] = useState(false)
+    const [counter, setCounter] = useState(180);
+
+
     useEffect(() => {
+        if(sessionStorage.getItem('time-format'))
+            setTimeFormat(sessionStorage.getItem('time-format'))
+        if(sessionStorage.getItem('active'))
+            setActive(JSON.parse(sessionStorage.getItem('active')))
+        if(sessionStorage.getItem('counter'))
+            setCounter(Number(sessionStorage.getItem('counter')))
         socket.emit('join-game', sessionStorage.getItem('game-code'))
         socket.on('next-round-started', (roundNumber) => {
             window.location.href = (`/round/${roundNumber}`)
@@ -15,7 +27,24 @@ const Waiting = () => {
         socket.on('round-number', roundNumber => setRoundNo(roundNumber))
         socket.on('message', ({message}) => alert(message))
         socket.on('game-over', () => window.location.href = '/gameover')
-    }, [socket])
+        if(active)
+        {
+            timerRef.current = setInterval(() => {
+                const secondCounter = counter % 60;
+                const minuteCounter = Math.floor(counter / 60);
+                const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter;
+                const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter;
+                setTimeFormat(computedMinute + ':' + computedSecond)
+                sessionStorage.setItem('time-format', computedMinute + ':' + computedSecond)
+                setCounter(counter => counter - 1);
+                sessionStorage.setItem('active',true)
+                sessionStorage.setItem('counter', counter - 1)
+            }, 1000)
+        }
+        return() => {
+            clearInterval(timerRef.current)
+        }
+    }, [socket, active, counter])
     
     const startGame = () => {
         socket.emit('start-next-round', sessionStorage.getItem('game-code'))
@@ -26,31 +55,49 @@ const Waiting = () => {
         window.location.href = '/gameover'
     }
 
+
     const skipGameRound = () => {
         socket.emit('skip-round', sessionStorage.getItem('game-code'))
         socket.on('skipped-round-number', roundNumber => setRoundNo(roundNumber))
     }
 
     return (
-        <div className='flex flex-col items-center justify-center p-5'>
-            <div>
-            {status === '1'?<FlashCard text = {'Select'} /> : <FlashCard text = {'Waiting for the host to start the round'} />}
+        <div className='flex flex-col items-center justify-center h-screen'>
+            <div className='w-auto' >
+                <h1 className='text-yellow-800 bg-yellow-400 px-3 pt-3 pb-2 rounded-lg text-md mb-0' >{'Waiting Arena'} </h1>
             </div>
+            <div className='bg-card bg-no-repeat bg-cover'>
+            {(roundNo === 5 || roundNo === 8 || roundNo === 10) && (status === '1')?
+            <div className='flex flex-col w-full justify-center items-center pt-3'>
+                <button onClick = {() => {
+                    sessionStorage.setItem('active', !active)
+                    setActive(!active)}} className='text-warning self-center text-8xl bg-black rounded-xl px-2 py-2'>
+                    {timeFormat}
+                </button>
+            </div> 
+            :
+            null
+            }
             {status === '1'?
-            roundNo < 11?
-            <div className='flex flex-row pt-10'>
+            roundNo < 11 ?
+            <div className='flex flex-row py-10 px-10'>
                 <div>
-                    <Button text = {`Start Round ${roundNo}`} display = {'bg-btn-bg-primary text-warning p-4'} clickHandler = {startGame} />  
+                    <button onClick = {startGame} className='skip-btn btn-lg'>{`Start Round ${roundNo}`}</button>
                 </div>
                 <div>
-                    <Button text = {`Skip Round ${roundNo}`} display = {'ml-5 bg-btn-bg-primary text-warning p-4'} clickHandler = {skipGameRound} />
+                <button onClick = {skipGameRound} className='skip-btn btn-lg ml-5'>{`Skip Round ${roundNo}`}</button>
                 </div>
             </div>
              : 
              <Button text = {`End Game`} display = {'bg-btn-bg-primary text-warning p-4'} clickHandler = {endGame} />
             : 
-            null
+            <div>
+                <h1 className='text-warning text-2xl font-bold px-10 py-10'>
+                    Waiting for the host to start the next round
+                </h1>
+            </div>
         }
+        </div>
         </div>
     )
 }

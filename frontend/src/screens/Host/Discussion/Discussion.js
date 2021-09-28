@@ -35,10 +35,8 @@ const Discussion = ({ players }) => {
       let originalTime = timeP.current;
       const percent = 100 - ((originalTime - timeValue) / originalTime) * 100;
       if (second >= 0 && second <= 9) {
-        setTimeFormat(`${min}:0${second}`);
         timeFormatValue = (`${min}:0${second}`)
       } else {
-        setTimeFormat(`${min}:${second}`);
         timeFormatValue = (`${min}:${second}`)
       }
       setTime(timeValue - 1);

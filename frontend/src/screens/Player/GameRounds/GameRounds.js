@@ -46,13 +46,10 @@ const GameRounds = () => {
         const percent = 100 - ((originalTime - timeValue) / originalTime) * 100;
         if (second >= 0 && second <= 9) {
           timeFormatValue = (`${min}:0${second}`)
-          setTimeFormat(`${min}:0${second}`);
         } else {
-          setTimeFormat(`${min}:${second}`);
           timeFormatValue = (`${min}:${second}`)
         }
         setTime(timeValue - 1);
-        setTimePercent(percent);
         const timeVal = timeValue - 1
         const timePercentValue = percent
         
@@ -90,6 +87,7 @@ const GameRounds = () => {
       setChoice(choice)
     })
     socket.on('time-values', ({time, timeFormat, timePercent}) => {
+      console.log('hi');
       setTime(time)
       setTimePercent(timePercent)
       setTimeFormat(timeFormat)
@@ -134,9 +132,6 @@ const GameRounds = () => {
     console.log('Didn');
     socket.emit("submit", { choice, playerName, code });
     clearInterval(timerID);
-    setTime(0);
-    setTimeFormat("0:00");
-    setTimePercent(0);
     setDisabled(true);
     Number(choice) === 1 ? setActive([true, false]) : setActive([false, true]);
   };
