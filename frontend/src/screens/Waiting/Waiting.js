@@ -47,6 +47,9 @@ const Waiting = () => {
     }, [socket, active, counter])
     
     const startGame = () => {
+        sessionStorage.removeItem('time-format')
+        sessionStorage.removeItem('active')
+        sessionStorage.removeItem('counter')
         socket.emit('start-next-round', sessionStorage.getItem('game-code'))
     }
 
@@ -57,6 +60,9 @@ const Waiting = () => {
 
 
     const skipGameRound = () => {
+        sessionStorage.removeItem('time-format')
+        sessionStorage.removeItem('active')
+        sessionStorage.removeItem('counter')
         socket.emit('skip-round', sessionStorage.getItem('game-code'))
         socket.on('skipped-round-number', roundNumber => setRoundNo(roundNumber))
     }
