@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
-import Button from "../../../components/Button";
+import Button from "../../../components/Button/Button";
 import { SocketContext } from "../../../context/SocketContext";
 import "./PlayerScreen.css";
 

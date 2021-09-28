@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { useParams } from "react-router-dom";
-import Button from "../../../components/Button";
+import Button from "../../../components/Button/Button";
 import DeckIcons from "../../../components/DeckIcons/DeckIcons";
 import FishOptions from "../../../components/FishOptions/FishOptions";
 import FlashCard from "../../../components/Flashcard/Flashcard";
@@ -17,6 +17,9 @@ import { SocketContext } from "../../../context/SocketContext";
 import Fish1 from "../../../images/Fish1-new.png";
 import Fish2 from "../../../images/Fish2-new.png";
 import "./GameRounds.css";
+import three from '../../../images/three.png'
+import five from '../../../images/five.png'
+import ten from '../../../images/ten.png'
 
 const GameRounds = () => {
   let timeP = useRef();
@@ -145,13 +148,20 @@ const GameRounds = () => {
   };
 
   if(Number(roundNo.id) === 5){
-    multiplier.current = 3
+    multiplier.current = (
+      <img src = {three} alt='3x' />
+    )
   }
   else if(Number(roundNo.id) === 8){
-    multiplier.current = 5
+    multiplier.current = (
+      <img src = {five} alt='5x' />
+
+    )
   }
   else if(Number(roundNo.id) === 10){
-    multiplier.current = 10
+    multiplier.current = (
+      <img src = {ten} alt='10x' />
+    )
   }
 
   return (
@@ -159,7 +169,7 @@ const GameRounds = () => {
       <div className="flex flex-col items-center justify-center">
         <div className="flex flex-row md:w-96 xs-mobile:w-9/12">
           <FlashCard text={`Day ${roundNo.id}`} />
-          {Number(roundNo.id) === 5 || Number(roundNo.id) === 8 || Number(roundNo.id) === 10? <p className='multiplier text-center p-2 w-16'>x {multiplier.current}</p> : null}
+          {Number(roundNo.id) === 5 || Number(roundNo.id) === 8 || Number(roundNo.id) === 10? <p className='rounded-full text-center px-2 py-2 ml-2 border-5 border-yellow-300'>{multiplier.current}</p> : null}
         </div>
         <Timer time={timeFormat} completed={timePercent} />
       </div>
@@ -196,7 +206,7 @@ const GameRounds = () => {
           text={"Submit"}
           clickHandler={submitChoice}
           display={
-            "text-warning bg-btn-bg-primary bg-center btn-lg w-25 self-center"
+            "bg-btn-bg-primary bg-center btn-lg w-25 self-center"
           }
         />
       )}

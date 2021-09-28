@@ -1,6 +1,6 @@
 import React, { useState, useContext, useEffect } from "react";
 import Heading from "../../../components/Heading";
-import Button from "../../../components/Button";
+import Button from "../../../components/Button/Button";
 import FlashCard from "../../../components/Flashcard/Flashcard";
 import { SocketContext } from "../../../context/SocketContext";
 import { Link } from "react-router-dom";

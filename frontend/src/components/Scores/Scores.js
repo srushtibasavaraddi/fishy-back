@@ -30,17 +30,17 @@ const Scores = ({ show, scores, players }) => {
           return (
             <li key={index + 20} className={`grid-display active ${show}`}>
               {index === 4 ? (
-                <p className="grid-display-item">
+                <p className="grid-display-item xl:ml-12 lg:ml-10">
                   {`#${index + 1}`}
                   <span className="multiplier">X3</span>
                 </p>
               ) : index === 7 ? (
-                <p className="grid-display-item">
+                <p className="grid-display-item xl:ml-12 lg:ml-10">
                   {`#${index + 1}`}
                   <span className="multiplier">X5</span>
                 </p>
               ) : index === 9 ? (
-                <p className="grid-display-item">
+                <p className="grid-display-item xl:ml-12 lg:ml-10">
                   {`#${index + 1}`}
                   <span className="multiplier">X10</span>
                 </p>
@@ -66,17 +66,17 @@ const Scores = ({ show, scores, players }) => {
         return (
           <li key={`${index + 1}`} className={`grid-display ${show}`}>
             {index === 4 ? (
-              <p className="grid-display-item">
+              <p className="grid-display-item xl:ml-12 lg:ml-10">
                 {`#${index + 1}`}
                 <span className="multiplier">X3</span>
               </p>
             ) : index === 7 ? (
-              <p className="grid-display-item">
+              <p className="grid-display-item xl:ml-12 lg:ml-10">
                 {`#${index + 1}`}
                 <span className="multiplier">X5</span>
               </p>
             ) : index === 9 ? (
-              <p className="grid-display-item">
+              <p className="grid-display-item xl:ml-12 lg:ml-10">
                 {`#${index + 1}`}
                 <span className="multiplier">X10</span>
               </p>

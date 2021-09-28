@@ -4,7 +4,7 @@ import "./Scoreboard.css";
 import Icons from "../../../components/Icons/Icons";
 import Scores from "../../../components/Scores/Scores";
 import { SocketContext } from "../../../context/SocketContext";
-import Button from "../../../components/Button";
+import Button from "../../../components/Button/Button";
 import { Link } from "react-router-dom";
 
 const Scoreboard = () => {
@@ -60,7 +60,7 @@ const Scoreboard = () => {
       >
         <Button
           text={"Next Round"}
-          display={"bg-btn-bg-primary bg-center text-warning p-3 mt-2 btn-lg"}
+          display={"bg-btn-bg-primary bg-center p-3 mt-2 btn-lg"}
           clickHandler={() => clickHandler2()}
         />
       </Link>

@@ -6,7 +6,7 @@ import React, {
   useRef,
 } from "react";
 import { Link, useParams } from "react-router-dom";
-import Button from "../../../components/Button";
+import Button from "../../../components/Button/Button";
 import FlashCard from "../../../components/Flashcard/Flashcard";
 import Timer from "../../../components/Timer/Timer";
 import { SocketContext } from "../../../context/SocketContext";
@@ -160,7 +160,7 @@ const Discussion = () => {
           >
             <Button
               text={"Results"}
-              display={"bg-btn-bg-primary p-3 bg-center text-warning btn-lg"}
+              display={"bg-btn-bg-primary p-3 bg-center btn-lg"}
             />
           </Link>
         )}

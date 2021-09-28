@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import Button from "../../../components/Button";
+import Button from "../../../components/Button/Button";
 import Heading from "../../../components/Heading";
 import { SocketContext } from "../../../context/SocketContext";
 import "./Settings.css";

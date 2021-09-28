@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from "react";
 import { SocketContext } from "../../context/SocketContext";
 import FlashCard from "../../components/Flashcard/Flashcard";
-import Button from "../../components/Button";
+import Button from "../../components/Button/Button";
 import { Link } from "react-router-dom";
 import './Lobby.css'
 
@@ -59,7 +59,7 @@ const Lobby = () => {
           }}
         >
           <Button
-            display={"bg-btn-bg-primary bg-center text-warning btn-lg"}
+            display={"bg-btn-bg-primary bg-center btn-lg"}
             text={"Start Game"}
             clickHandler={clickHandler}
           />

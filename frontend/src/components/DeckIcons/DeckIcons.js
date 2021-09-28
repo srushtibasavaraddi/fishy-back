@@ -3,7 +3,7 @@ import Icons from "../Icons/Icons";
 import Modal from "../Modal/Modal";
 import { SocketContext } from "../../context/SocketContext";
 import Heading from "../Heading";
-import Button from "../Button";
+import Button from "../Button/Button";
 import rules_4 from "../../images/rules_guide.png";
 
 const DeckIcons = () => {

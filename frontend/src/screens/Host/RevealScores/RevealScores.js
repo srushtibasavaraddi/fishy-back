@@ -6,7 +6,7 @@ import Fish2 from "../../../images/Fish2-new.png";
 import Icons from "../../../components/Icons/Icons";
 import "./RevealScores.css";
 import { SocketContext } from "../../../context/SocketContext";
-import Button from "../../../components/Button";
+import Button from "../../../components/Button/Button";
 import { Link, useParams } from "react-router-dom";
 import DeckIcons from "../../../components/DeckIcons/DeckIcons";
 
@@ -88,7 +88,7 @@ const RevealScores = () => {
       <Link to="/host/scores">
         <Button
           text={"Scores"}
-          display={"text-warning bg-btn-bg-primary bg-center btn-lg mt-3"}
+          display={"bg-btn-bg-primary bg-center btn-lg mt-3"}
         />
       </Link>
 

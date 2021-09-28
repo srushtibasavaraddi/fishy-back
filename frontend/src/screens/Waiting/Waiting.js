@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import Button from '../../components/Button'
+import Button from '../../components/Button/Button'
 import { SocketContext } from '../../context/SocketContext'
 import './Waiting.css'
 
@@ -92,7 +92,7 @@ const Waiting = () => {
                 </div>
             </div>
              : 
-             <Button text = {`End Game`} display = {'bg-btn-bg-primary text-warning p-4'} clickHandler = {endGame} />
+             <Button text = {`End Game`} display = {'bg-btn-bg-primary p-4'} clickHandler = {endGame} />
             : 
             <div>
                 <h1 className='text-warning text-2xl font-bold px-10 py-10'>
