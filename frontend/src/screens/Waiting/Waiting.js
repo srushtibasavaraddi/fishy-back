@@ -29,17 +29,23 @@ const Waiting = () => {
         socket.on('game-over', () => window.location.href = '/gameover')
         if(active)
         {
-            timerRef.current = setInterval(() => {
-                const secondCounter = counter % 60;
-                const minuteCounter = Math.floor(counter / 60);
-                const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter;
-                const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter;
-                setTimeFormat(computedMinute + ':' + computedSecond)
-                sessionStorage.setItem('time-format', computedMinute + ':' + computedSecond)
-                setCounter(counter => counter - 1);
-                sessionStorage.setItem('active',true)
-                sessionStorage.setItem('counter', counter - 1)
-            }, 1000)
+            if(counter >= 0){
+                timerRef.current = setInterval(() => {
+                    const secondCounter = counter % 60;
+                    const minuteCounter = Math.floor(counter / 60);
+                    const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter;
+                    const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter;
+                    setTimeFormat(computedMinute + ':' + computedSecond)
+                    sessionStorage.setItem('time-format', computedMinute + ':' + computedSecond)
+                    setCounter(counter => counter - 1);
+                    sessionStorage.setItem('active',true)
+                    sessionStorage.setItem('counter', counter - 1)
+                }, 1000)
+            }
+            else{
+                setCounter(0)
+                setTimeFormat('00:00')
+            }
         }
         return() => {
             clearInterval(timerRef.current)
