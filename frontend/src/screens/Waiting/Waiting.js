@@ -29,7 +29,7 @@ const Waiting = () => {
         socket.on('game-over', () => window.location.href = '/gameover')
         if(active)
         {
-            if(counter >= 0){
+            if(counter > 0){
                 timerRef.current = setInterval(() => {
                     const secondCounter = counter % 60;
                     const minuteCounter = Math.floor(counter / 60);
