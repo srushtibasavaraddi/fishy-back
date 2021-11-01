@@ -59,7 +59,7 @@ const GameRounds = () => {
         socket.emit('player-time-details',{timeVal, timePercentValue, timeFormatValue, code, playerName})
       } else {
         clearInterval(timerID.current);
-        if (!disabled) {
+        if (!disabled && timeValue === 0) {
           socket.emit("submit", { choice, playerName, code });
         }
         const timeVal = 0, timePercentValue = 0, timeFormatValue = '0:00'

@@ -24,7 +24,7 @@ const MyCarousel = ({showRules}) => {
             <Carousel>
                 {images.map((i, index) => {
                     return(
-                        <Carousel.Item key = {index} interval={10000} className = "xs-mobile:h-96 md:h-3/5 w-96">
+                        <Carousel.Item key = {index} interval={10000} className = "xs-mobile:h-96 md:h-3/5">
                             <img
                             className="w-full md:h-auto"
                             src={i}
