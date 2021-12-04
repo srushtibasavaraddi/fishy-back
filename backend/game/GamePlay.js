@@ -35,27 +35,12 @@ module.exports = (io, socket) => {
                     io.to(socket.id).emit('choice', player.choice)
                 if(player.disabled === true)
                     io.to(socket.id).emit('disabled-status', player.disabled)
-                const time = player.time
-                const timeFormat = player.timeFormat
-                const timePercent = player.percent 
-                io.to(socket.id).emit('time-values', {time, timeFormat, timePercent})
                 io.to(socket.id).emit('indivScore', player.indivScore)
             }
         })
 
         io.to(socket.id).emit('new-timer', roomObject.timer)
         io.to(socket.id).emit('pause-status', roomObject.paused)
-    }
-
-    const timeDetails = ({timeVal, timePercentValue, timeFormatValue, code, playerName }) => {
-        let roomObject = roomArrayMap.get(code)
-        roomObject.playerDetails.find(player => {
-            if(player.name === playerName){
-                player.time = timeVal
-                player.timeFormat = timeFormatValue
-                player.percent = timePercentValue
-            }
-        })
     }
 
     const hostTimeDetails = ({timeVal, timePercentValue, timeFormatValue, code }) => {
@@ -113,7 +98,6 @@ module.exports = (io, socket) => {
     socket.on('join-host', playGameAsHost)
     socket.on('resume', resume)
     socket.on('pause', pause)
-    socket.on('player-time-details', timeDetails)
     socket.on('host-time-details', hostTimeDetails)
     socket.on('join-players', playGame)
     socket.on('toggle', toggleChoice)

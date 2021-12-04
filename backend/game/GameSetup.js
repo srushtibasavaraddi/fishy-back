@@ -87,9 +87,6 @@ module.exports = (io, socket) => {
                     choice : 0,
                     realChoice : 0,
                     disabled : false,
-                    time : 120,
-                    timeFormat : '0:00',
-                    timePercent : 0,
                     eye : false,
                     indivScore : []
                 })

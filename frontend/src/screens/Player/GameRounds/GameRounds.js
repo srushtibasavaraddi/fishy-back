@@ -1,6 +1,5 @@
 import React, {
   useState,
-  useCallback,
   useEffect,
   useContext,
   useRef,
@@ -22,11 +21,12 @@ import five from '../../../images/five.png'
 import ten from '../../../images/ten.png'
 
 const GameRounds = () => {
-  let timeP = useRef();
+  const timeP = useRef(120)
   const roundNo = useParams();
   let multiplier = useRef(0)
   const socket = useContext(SocketContext);
-  const [time, setTime] = useState();
+  const timerRef = useRef()
+  const [time, setTime] = useState(120);
   const [timeFormat, setTimeFormat] = useState();
   const [timePercent, setTimePercent] = useState();
   const [choice, setChoice] = useState(1);
@@ -39,49 +39,6 @@ const GameRounds = () => {
   let playerName = sessionStorage.getItem("playerName");
   let code = (sessionStorage.getItem("game-code"));
 
-  const setTimer = useCallback(
-    timeValue => {
-      let timeFormatValue = ''
-      if (timeValue > 0) {
-        const min = Math.floor(timeValue / 60);
-        const second = Math.floor(timeValue % 60);
-        let originalTime = timeP.current;
-        const percent = 100 - ((originalTime - timeValue) / originalTime) * 100;
-        if (second >= 0 && second <= 9) {
-          timeFormatValue = (`${min}:0${second}`)
-        } else {
-          timeFormatValue = (`${min}:${second}`)
-        }
-        setTime(timeValue - 1);
-        const timeVal = timeValue - 1
-        const timePercentValue = percent
-        
-        socket.emit('player-time-details',{timeVal, timePercentValue, timeFormatValue, code, playerName})
-      } else {
-        clearInterval(timerID.current);
-        if (!disabled && timeValue === 0) {
-          socket.emit("submit", { choice, playerName, code });
-        }
-        const timeVal = 0, timePercentValue = 0, timeFormatValue = '0:00'
-        socket.emit('player-time-details',{timeVal, timePercentValue, timeFormatValue, code, playerName})
-        setDisabled(true);
-        setTime(0);
-        Number(choice) === 1
-          ? setActive([true, false])
-          : setActive([false, true]);
-        setTimeFormat("0:00");
-      }
-    },
-    [choice, playerName, socket, disabled, code]
-  );
-
-  const countTime = useCallback(() => {
-    if(!pause)
-      timerID.current = setInterval(() => setTimer(time), 1000);
-    else
-      clearInterval(timerID.current)
-  }, [time, setTimer, pause]);
-
   useEffect(() => {
     socket.emit("join-players", {code, playerName})
     socket.on('choice', choice => {
@@ -89,28 +46,72 @@ const GameRounds = () => {
       setDisabled(true)
       setChoice(choice)
     })
-    socket.on('time-values', ({time, timeFormat, timePercent}) => {
-      console.log('hi');
-      setTime(time)
-      setTimePercent(timePercent)
-      setTimeFormat(timeFormat)
-    })
 
-    socket.on('new-timer', (newTimer) => timeP.current = newTimer)
+    socket.on('new-timer', (newTimer) => {
+      if(!sessionStorage.getItem('time-val')){
+        setTime(newTimer)
+      }
+      timeP.current = newTimer
+    }
+    )
+
+    if(sessionStorage.getItem('time-format')){
+      if(sessionStorage.getItem('time-val')){
+          setTime(Number(sessionStorage.getItem('time-val')))
+          setTimeFormat(sessionStorage.getItem('time-format'))
+        }
+    }
+
     socket.on('pause-status', bool => setPause(bool))
     socket.on('disabled-status',bool => setDisabled(bool))
     socket.on('indivScore', indivScore => setIndivScore(indivScore))
-    socket.on("showChoices", () => window.location.href = `/player/results/${roundNo.id}`);
+    socket.on("showChoices", () => {
+      sessionStorage.removeItem('time-format')
+      sessionStorage.removeItem('time-percent')
+      sessionStorage.removeItem('time-val')  
+      window.location.href = `/player/results/${roundNo.id}`
+    });
     
     socket.on("quit-game", () => {
       console.log('Hi');
-      (window.location.href = "/game")});
-    countTime()
-
-    return () => {
-      clearInterval(timerID.current);
-    };
-  }, [countTime, socket, timerID, roundNo, playerName, time, code]);
+      (window.location.href = "/game")})
+    
+      let active = false
+      if(!active && !pause){
+        if(time !== 0){
+          timerRef.current = setInterval(() => {
+            const secondCounter = time % 60;
+            const minuteCounter = Math.floor(time / 60);
+            setTime(time - 1)
+            sessionStorage.setItem('time-val', time - 1)
+            const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter
+            const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter
+            sessionStorage.setItem('time-format', computedMinute + ':' + computedSecond)
+            setTimeFormat(computedMinute + ':' + computedSecond)
+            let originalTime = timeP.current;
+            console.log(timeP.current);
+            console.log(time);
+            const percent = 100 - ((originalTime - time)/originalTime) * 100 
+            console.log(percent);
+            setTimePercent(percent)
+          }, 1000)
+        }
+        else{
+          setTime(0)
+          setTimeFormat('0:00')
+          setTimePercent(0)
+          socket.emit('submit', { choice, playerName, code } )
+          sessionStorage.setItem('time-val', 0)
+          sessionStorage.setItem('time-format', '0:00')
+        }
+      }
+      
+      return () => {
+        clearInterval(timerRef.current)
+        active = true
+      }
+    
+  }, [socket, timerRef, roundNo, playerName, time, code, choice, pause]);
 
   useEffect(() => {
     socket.on('pause', () => {
@@ -121,18 +122,19 @@ const GameRounds = () => {
       setPause(false)
       setDisabled(false)
     })
+    
+
   }, [socket, time]);
 
 
   const selectChoice = num => {
     num === 1 ? setActive([true, false]) : setActive([false, true]);
-    setChoice(num);
-    console.log(num);
-    socket.emit("toggle", { num, playerName, code });
+    setChoice(num)
+    console.log(num)
+    socket.emit("toggle", { num, playerName, code })
   };
 
   const submitChoice = () => {
-    console.log('Didn');
     socket.emit("submit", { choice, playerName, code });
     clearInterval(timerID);
     setDisabled(true);

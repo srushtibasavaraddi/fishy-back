@@ -69,7 +69,7 @@ const PlayerScreen = () => {
           className="block text-yellow-500 text-base font-bold mb-2 py-3"
           htmlFor="Code"
         >
-          Player Name :
+          Team Name :
         </label>
         <input
           type="text"
