@@ -2,7 +2,6 @@ import React, {
   useState,
   useEffect,
   useContext,
-  useCallback,
   useRef,
 } from "react";
 import { Link, useParams } from "react-router-dom";
@@ -29,41 +28,7 @@ const Discussion = () => {
   const [playerInfo, setPlayerInfo] = useState([]);
   const [disabled, setDisabled] = useState(true);
   const [mode, setMode] = useState(false)
-  let timerID = useRef(null);
-
-  const setTimer = useCallback(timeValue => {
-    let timeFormatValue = ''
-    if (timeValue >= 0) {
-      const min = Math.floor(timeValue / 60);
-      const second = Math.floor(timeValue % 60);
-      let originalTime = timeP.current;
-      const percent = 100 - ((originalTime - timeValue) / originalTime) * 100;
-      if (second >= 0 && second <= 9) {
-        timeFormatValue = (`${min}:0${second}`)
-      } else {
-        timeFormatValue = (`${min}:${second}`)
-      }
-      setTime(timeValue - 1);
-      setTimePercent(percent);
-      const timeVal = timeValue - 1
-      const timePercentValue = percent
-      socket.emit('host-time-details',{timeVal, timePercentValue, timeFormatValue, code})
-
-    } else {
-      clearInterval(timerID);
-      setTime(0);
-      setTimeFormat("0:00");
-      const timeVal = 0, timePercentValue = 0, timeFormatValue = '0:00'
-      socket.emit('host-time-details',{timeVal, timePercentValue, timeFormatValue, code})
-    }
-  }, [code, socket]);
-
-  const countTime = useCallback(() => {
-    if(!mode)
-      timerID.current = setInterval(() => setTimer(time), 1000);
-    else
-      clearInterval(timerID.current)
-  }, [time, setTimer, mode]);
+  let timerRef = useRef();
 
   const pauseButton = () => {
     socket.emit('pause', sessionStorage.getItem('game-code'))
@@ -82,29 +47,68 @@ const Discussion = () => {
     });
     socket.on("chosen", playerData => {
       setPlayerInfo(playerData);
-    });
-    socket.on('time-values', ({time, timeFormat, timePercent}) => {
-      setTime(time)
-      setTimePercent(timePercent)
-      setTimeFormat(timeFormat)
     })
+    
     socket.on("stop-timer", () => {
       setTimeFormat("0:00");
       setTimePercent(0);
       setTime(0);
       setDisabled(false);
     });
-    socket.on('new-timer', newTimer => timeP.current = newTimer)
+
+    socket.on('new-timer', (newTimer) => {
+      if(!sessionStorage.getItem('time-val')){
+        setTime(newTimer)
+      }
+      timeP.current = newTimer
+    }
+    )
+
+    if(sessionStorage.getItem('time-format')){
+      if(sessionStorage.getItem('time-val')){
+          setTime(Number(sessionStorage.getItem('time-val')))
+          setTimeFormat(sessionStorage.getItem('time-format'))
+        }
+    }
 
     socket.on('pause-status', bool => setMode(bool))
     socket.on('player-values', players => setPlayerInfo(players))
 
-    countTime();
+    let active = false
+    if(!active && !mode){
+      console.log(time);
+      if(time !== 0){
+        timerRef.current = setInterval(() => {
+          const secondCounter = time % 60;
+          const minuteCounter = Math.floor(time / 60);
+          setTime(time - 1)
+          sessionStorage.setItem('time-val', time - 1)
+          const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter
+          const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter
+          sessionStorage.setItem('time-format', computedMinute + ':' + computedSecond)
+          setTimeFormat(computedMinute + ':' + computedSecond)
+          let originalTime = timeP.current;
+          console.log(timeP.current);
+          console.log(time);
+          const percent = 100 - ((originalTime - time)/originalTime) * 100 
+          console.log(percent);
+          setTimePercent(percent)
+        }, 1000)
+      }
+      else{
+        setTime(0)
+        setTimeFormat('0:00')
+        setTimePercent(0)
+        sessionStorage.setItem('time-val', 0)
+        sessionStorage.setItem('time-format', '0:00')
+      }
+    }
 
     return () => {
-      clearInterval(timerID.current);
+      clearInterval(timerRef.current);
+      active = true
     };
-  }, [countTime, timerID, socket, time, code]);
+  }, [ mode, socket, time, code]);
 
   return (
     <div className="p-1 mt-1 flex flex-col justify-center items-center h-screen">
