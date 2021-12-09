@@ -79,9 +79,8 @@
         background: var(--bg-card) center center/cover no-repeat;
         border: 0.45rem solid var(--btn-bg-border);
         border-radius: calc(var(--br) * 1.25);
-        position: relative;
-        width: 13.5rem;
+        width: 12.5rem;
         height: 15rem;
-        flex-grow:1;
+        margin-left: 30px;
       }
 }

@@ -23,6 +23,9 @@ const RevealScores = () => {
   useEffect(() => {
     socket.emit("options", (sessionStorage.getItem("game-code")));
     socket.on("updated-players", updatedPlayers => setPlayers(updatedPlayers))
+    sessionStorage.removeItem('time-val')
+    sessionStorage.removeItem('time-format')
+    
   }, [socket]);
 
   return (

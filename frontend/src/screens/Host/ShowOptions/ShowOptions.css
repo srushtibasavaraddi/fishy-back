@@ -26,7 +26,8 @@
 
 .two::before,
 .toggle-two::before {
-  height: 17rem;
+  height: 8.25rem;
+  top: 10rem;
 }
 
 
@@ -71,6 +72,7 @@
 
   .two::before,
   .toggle-two::before {
+    top:10rem;
     height: 9.5rem;
   }
 
@@ -105,7 +107,7 @@
       position: absolute;
       width: 90%;
       height: 4.25rem;
-      top: 1rem;
+      top: 10rem;
       left: 0.575rem;
       z-index: 2;
     }
@@ -149,6 +151,7 @@
 
     .two::before,
     .toggle-two::before {
+      top: 10rem;
       height: 10rem;
     }
 
@@ -186,6 +189,7 @@
 
     .two::before,
     .toggle-two::before {
+      top: 10rem;
       height: 10rem;
     }
 
@@ -203,10 +207,6 @@
         background: var(--bg-card) center center/cover no-repeat;
         border: 0.45rem solid var(--btn-bg-border);
         border-radius: calc(var(--br) * 1.25);
-        position: relative;
-        width: 13.5rem;
-        height: 15rem;
-        flex-grow:1;
       }
 
       .one::before,
@@ -224,7 +224,8 @@
       
       .two::before,
       .toggle-two::before {
-        height: 13rem;
+        top: 7rem;
+        height: 6rem;
       }
 }
 
