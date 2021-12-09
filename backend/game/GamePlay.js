@@ -10,6 +10,7 @@ module.exports = (io, socket) => {
                 player.realChoice = 0
             }
         })
+        io.in(code).emit('toggled', roomObject.playerDetails)
     }
 
     const submitChoice = ({choice, playerName, code}) => {
@@ -23,6 +24,11 @@ module.exports = (io, socket) => {
             }
         })
         roomObject.totalPeopleWhoSubmittedChoice += 1
+        io.in(code).emit('chosen', roomObject.playerDetails)
+        if(roomObject.totalPeopleWhoSubmittedChoice === roomObject.players.length)
+        {
+            io.in(code).emit('stop-timer')
+        }
         console.log('Player Submitted choice!');
     }
 
@@ -41,13 +47,6 @@ module.exports = (io, socket) => {
 
         io.to(socket.id).emit('new-timer', roomObject.timer)
         io.to(socket.id).emit('pause-status', roomObject.paused)
-    }
-
-    const hostTimeDetails = ({timeVal, timePercentValue, timeFormatValue, code }) => {
-        let roomObject = roomArrayMap.get(code)
-        roomObject.hostTime = timeVal
-        roomObject.hostPercent = timePercentValue
-        roomObject.hostTimeFormat = timeFormatValue
     }
 
     const pause = (code) => {
@@ -73,20 +72,10 @@ module.exports = (io, socket) => {
 
     const playGameAsHost = (code) => {
         let roomObject = roomArrayMap.get(code)
-        const time = roomObject.hostTime
-        const timeFormat = roomObject.hostTimeFormat
-        const timePercent = roomObject.hostPercent
-        io.to(socket.id).emit('time-values', {time, timeFormat, timePercent})  
+        socket.join(code)
         io.to(socket.id).emit('new-timer', roomObject.timer)
         io.to(socket.id).emit('pause-status', roomObject.paused)
         io.to(socket.id).emit('player-values', roomObject.playerDetails)
-        if(roomObject.totalPeopleWhoSubmittedChoice === roomObject.players.length)
-        {
-            roomObject.hostTime = 0
-            roomObject.hostTimeFormat = '0:00'
-            roomObject.hostPercent = 0
-            io.to(socket.id).emit('stop-timer')
-        }
     }
 
     const quitGame = (code) => {
@@ -98,7 +87,6 @@ module.exports = (io, socket) => {
     socket.on('join-host', playGameAsHost)
     socket.on('resume', resume)
     socket.on('pause', pause)
-    socket.on('host-time-details', hostTimeDetails)
     socket.on('join-players', playGame)
     socket.on('toggle', toggleChoice)
     socket.on('submit', submitChoice)

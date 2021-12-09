@@ -76,42 +76,52 @@ const GameRounds = () => {
       console.log('Hi');
       (window.location.href = "/game")})
     
-      let active = false
-      if(!active && !pause){
-        if(time !== 0){
-          timerRef.current = setInterval(() => {
-            const secondCounter = time % 60;
-            const minuteCounter = Math.floor(time / 60);
-            setTime(time - 1)
-            sessionStorage.setItem('time-val', time - 1)
-            const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter
-            const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter
-            sessionStorage.setItem('time-format', computedMinute + ':' + computedSecond)
-            setTimeFormat(computedMinute + ':' + computedSecond)
-            let originalTime = timeP.current;
-            console.log(timeP.current);
-            console.log(time);
-            const percent = 100 - ((originalTime - time)/originalTime) * 100 
-            console.log(percent);
-            setTimePercent(percent)
-          }, 1000)
-        }
-        else{
-          setTime(0)
-          setTimeFormat('0:00')
-          setTimePercent(0)
-          socket.emit('submit', { choice, playerName, code } )
-          sessionStorage.setItem('time-val', 0)
-          sessionStorage.setItem('time-format', '0:00')
-        }
+      
+    
+  }, [socket, roundNo, playerName, code, choice]);
+
+  useEffect(() => {
+
+    let active = false
+    if(!active && !pause){
+      if(time !== 0){
+        timerRef.current = setInterval(() => {
+          const secondCounter = time % 60;
+          const minuteCounter = Math.floor(time / 60);
+          setTime(time - 1)
+          sessionStorage.setItem('time-val', time - 1)
+          const computedSecond = String(secondCounter).length === 1 ? `0${secondCounter}`: secondCounter
+          const computedMinute = String(minuteCounter).length === 1 ? `0${minuteCounter}`: minuteCounter
+          sessionStorage.setItem('time-format', computedMinute + ':' + computedSecond)
+          setTimeFormat(computedMinute + ':' + computedSecond)
+          let originalTime = timeP.current;
+          console.log(timeP.current);
+          console.log(time);
+          const percent = 100 - ((originalTime - time)/originalTime) * 100 
+          console.log(percent);
+          setTimePercent(percent)
+        }, 1000)
       }
+      else{
+        setTime(0)
+        setTimeFormat('0:00')
+        setTimePercent(0)
+        socket.emit('submit', { choice, playerName, code } )
+        setDisabled(true);
+        Number(choice) === 1
+          ? setActive([true, false])
+          : setActive([false, true])
+        sessionStorage.setItem('time-val', 0)
+        sessionStorage.setItem('time-format', '0:00')
+      }
+    }
       
       return () => {
         clearInterval(timerRef.current)
         active = true
       }
-    
-  }, [socket, timerRef, roundNo, playerName, time, code, choice, pause]);
+
+  }, [timerRef, time, pause, choice, code, playerName, socket])
 
   useEffect(() => {
     socket.on('pause', () => {

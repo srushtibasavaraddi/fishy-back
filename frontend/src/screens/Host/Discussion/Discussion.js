@@ -63,7 +63,6 @@ const Discussion = () => {
       timeP.current = newTimer
     }
     )
-
     if(sessionStorage.getItem('time-format')){
       if(sessionStorage.getItem('time-val')){
           setTime(Number(sessionStorage.getItem('time-val')))
@@ -74,6 +73,16 @@ const Discussion = () => {
     socket.on('pause-status', bool => setMode(bool))
     socket.on('player-values', players => setPlayerInfo(players))
 
+    
+  }, [ socket, code ]);
+
+  useEffect(() => {
+    if(sessionStorage.getItem('time-format')){
+      if(sessionStorage.getItem('time-val')){
+          setTime(Number(sessionStorage.getItem('time-val')))
+          setTimeFormat(sessionStorage.getItem('time-format'))
+        }
+    }
     let active = false
     if(!active && !mode){
       console.log(time);
@@ -107,8 +116,8 @@ const Discussion = () => {
     return () => {
       clearInterval(timerRef.current);
       active = true
-    };
-  }, [ mode, socket, time, code]);
+    }
+  }, [timerRef, time, mode])
 
   return (
     <div className="p-1 mt-1 flex flex-col justify-center items-center h-screen">
