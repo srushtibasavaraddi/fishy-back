@@ -10,12 +10,12 @@ const PlayerScreen = () => {
   const [code, correctCode] = useState(false);
   useEffect(() => {
     sessionStorage.setItem("status", 0);
-    socket.on('error', ({message}) => {
-      if(!code){
-        alert(message)
-        correctCode(true)
+    socket.on("error", ({ message }) => {
+      if (!code) {
+        alert(message);
+        correctCode(true);
       }
-    })
+    });
   }, [socket, code]);
 
   const handlegameLink = e => {
@@ -27,21 +27,23 @@ const PlayerScreen = () => {
   };
 
   const enterGame = () => {
-    socket.emit("authenticate", {inputCode, playerName});
+    console.log("Enter game");
+    console.log(socket.id);
+    socket.emit("authenticate", { inputCode, playerName, id: socket.id });
     socket.on("authenticated", value => {
       if (value === 1) {
-        sessionStorage.setItem('game-code', inputCode)
+        sessionStorage.setItem("game-code", inputCode);
         window.location.href = `/lobby/${inputCode}`;
         correctCode(true);
       } else {
-        console.log(value)
+        console.log(value);
         if (!code) {
           alert("Wrong code");
           correctCode(true);
         }
       }
-    })
-    socket.on('change', ({message}) => alert(message))
+    });
+    socket.on("change", ({ message }) => alert(message));
     sessionStorage.setItem("playerName", playerName);
   };
 
@@ -82,9 +84,7 @@ const PlayerScreen = () => {
       </div>
       <div className="self-center join-btn">
         <Button
-          display={
-            `bg-btn-primary`
-          }
+          display={`bg-btn-primary`}
           text="Join"
           clickHandler={enterGame}
         />
