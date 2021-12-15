@@ -16,7 +16,12 @@ const PORT = process.env.PORT || 5000;
 
 const MODE = process.env.NODE_ENV || "development";
 
-const io = require("socket.io")(PORT);
+const io = require("socket.io")(PORT, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  },
+});
 
 const GameSetup = require("./game/GameSetup");
 const GameLobby = require("./game/GameLobby");
