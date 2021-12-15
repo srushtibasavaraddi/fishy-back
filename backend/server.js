@@ -4,18 +4,19 @@ const app = express();
 const colors = require("colors");
 const cors = require("cors");
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  })
+);
 app.use(express.json());
 
 const PORT = process.env.PORT || 5000;
 
 const MODE = process.env.NODE_ENV || "development";
 
-const io = require("socket.io")(PORT, {
-  cors: {
-    origins: ["http://localhost:3000", "*"],
-  },
-});
+const io = require("socket.io")(PORT);
 
 const GameSetup = require("./game/GameSetup");
 const GameLobby = require("./game/GameLobby");
