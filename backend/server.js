@@ -8,6 +8,7 @@ app.use(
   cors({
     origin: "*",
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+    credentials: true,
   })
 );
 app.use(express.json());
@@ -20,6 +21,7 @@ const io = require("socket.io")(PORT, {
   cors: {
     origin: "*",
     methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+    credentials: true,
   },
 });
 
