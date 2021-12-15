@@ -1,6 +1,8 @@
 const express = require("express");
 
 const app = express();
+const http = require("http");
+const server = http.createServer(app);
 const colors = require("colors");
 const cors = require("cors");
 
@@ -13,17 +15,7 @@ app.use(
 );
 app.use(express.json());
 
-const PORT = process.env.PORT || 5000;
-
-const MODE = process.env.NODE_ENV || "development";
-
-const io = require("socket.io")(PORT, {
-  cors: {
-    origin: "*",
-    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
-    credentials: true,
-  },
-});
+const io = require("socket.io")(server);
 
 const GameSetup = require("./game/GameSetup");
 const GameLobby = require("./game/GameLobby");
@@ -47,7 +39,11 @@ app.get("/", (req, res) => {
   res.send("Hello World from the server!");
 });
 
-app.listen(
+const PORT = process.env.PORT || 5000;
+
+const MODE = process.env.NODE_ENV || "development";
+
+server.listen(
   PORT,
   console.log(
     `Server running on port ${PORT} in ${MODE.blue.bold + " mode".yellow.bold} `
