@@ -14,7 +14,12 @@ app.use(
 );
 app.use(express.json());
 
-const io = require("socket.io")(server);
+const io = require("socket.io")(server, {
+  cors: {
+    origin: "*",
+    methods: ["GET", "POST", "DELETE", "UPDATE", "PUT", "PATCH"],
+  },
+});
 
 const GameSetup = require("./game/GameSetup");
 const GameLobby = require("./game/GameLobby");
