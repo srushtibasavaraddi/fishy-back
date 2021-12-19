@@ -77,12 +77,12 @@ const GameRounds = () => {
       if (updatedChoice.name === playerName) {
         setChoice(updatedChoice.choice);
       }
-      return () => {
-        sessionStorage.removeItem("time-format");
-        sessionStorage.removeItem("time-percent");
-        sessionStorage.removeItem("time-val");
-      };
     });
+    return () => {
+      sessionStorage.removeItem("time-format");
+      sessionStorage.removeItem("time-percent");
+      sessionStorage.removeItem("time-val");
+    };
   }, [socket, roundNo, playerName, code, choice]);
 
   useEffect(() => {
