@@ -14,7 +14,10 @@ const Waiting = () => {
   const [waitingMsg, setWaitingMsg] = useState("");
 
   useEffect(() => {
-    if (sessionStorage.getItem("time-format"))
+    sessionStorage.removeItem("time-val");
+    sessionStorage.removeItem("time-format");
+    sessionStorage.removeItem("time-percent");
+    if (sessionStorage.getItem("time-forma"))
       setTimeFormat(sessionStorage.getItem("time-format"));
     if (sessionStorage.getItem("active"))
       setActive(JSON.parse(sessionStorage.getItem("active")));
