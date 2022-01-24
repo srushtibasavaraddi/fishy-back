@@ -74,6 +74,14 @@ module.exports = (io, socket) => {
       });
       return;
     }
+
+    if(!Array.from(roomArrayMap.keys()).includes(inputCode)){
+      io.to(socket.id).emit("error", {
+        message: "room doesn't exist",
+      });
+      return;
+    }
+
     inputCode = inputCode.trim();
     if (roomArrayMap.get(inputCode).players.length < 4) {
       if (roomArrayMap.get(inputCode)) {
