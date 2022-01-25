@@ -85,7 +85,7 @@ const GameRounds = () => {
       sessionStorage.removeItem("time-percent");
       sessionStorage.removeItem("time-val");
     };
-  }, [socket, roundNo, playerName, code, choice]);
+  }, [socket, roundNo, playerName, code]);
 
   useEffect(() => {
     let active = false;
