@@ -4,16 +4,15 @@ import Heading from "../../../components/Heading";
 import { SocketContext } from "../../../context/SocketContext";
 import "./Settings.css";
 
-const Settings = ({ showSettings, gameCode }) => {
+const Settings = ({ showSettings, gameCode, timer, setTimer }) => {
   const socket = useContext(SocketContext);
-  const [timer, setTimer] = useState(120);
-  
-  const getTimer = e => {
+
+  const getTimer = (e) => {
     setTimer(e.target.value);
   };
 
   const saveChanges = () => {
-    socket.emit("set-timer", {timer, gameCode});
+    socket.emit("set-timer", { timer, gameCode });
     showSettings(false);
   };
 
@@ -44,7 +43,7 @@ const Settings = ({ showSettings, gameCode }) => {
         </label>
         <input
           type="text"
-          onChange={e => getTimer(e)}
+          onChange={(e) => getTimer(e)}
           placeholder="Set time"
           value={timer}
           className="inp"
