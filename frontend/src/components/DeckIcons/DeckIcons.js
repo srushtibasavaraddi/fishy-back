@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router";
 import Icons from "../Icons/Icons";
 import Modal from "../Modal/Modal";
 import { SocketContext } from "../../context/SocketContext";
@@ -8,6 +9,7 @@ import rules_4 from "../../images/rules_guide.png";
 
 const DeckIcons = () => {
   const socket = useContext(SocketContext);
+  const history = useHistory();
   const [rules, showRules] = useState(false);
   const [quit, showQuit] = useState(false);
   const status = Number(sessionStorage.getItem("status"));
@@ -23,7 +25,8 @@ const DeckIcons = () => {
     socket.emit("quitGame", sessionStorage.getItem('game-code'));
     sessionStorage.clear();
     localStorage.clear();
-    window.location.href = "/game";
+    // window.location.href = "/game";
+    history.push('/game')
   };
 
   return (

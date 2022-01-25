@@ -1,4 +1,5 @@
 import React, { useState, useContext, useEffect } from "react";
+import { useHistory } from "react-router";
 import ShowOptions from "../../Host/ShowOptions/ShowOptions";
 import Fish1 from "../../../images/Fish1-new.png";
 import Fish2 from "../../../images/Fish2-new.png";
@@ -9,21 +10,23 @@ import { useParams } from "react-router-dom";
 const SeeResults = () => {
   let roundNo = useParams();
   const [players, setPlayers] = useState([]);
+  const history = useHistory();
   const socket = useContext(SocketContext);
   useEffect(() => {
     socket.emit("new-room", sessionStorage.getItem('game-code'));
     socket.on("updated-players", updatedPlayers => {
       setPlayers(updatedPlayers);
     });
-    socket.on(
-      "come-to-scores",
-      () => (window.location.href = "/player/scores")
+    socket.on("come-to-scores", () =>
+      // window.location.href = "/player/scores"
+      history.push("/player/scores")
     );
 
     socket.on("quit-game", () => {
       sessionStorage.clear();
       localStorage.clear();
-      window.location.href = "/game";
+      // window.location.href = "/game";
+      history.push('/game')
     });
   }, [socket]);
 

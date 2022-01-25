@@ -1,4 +1,5 @@
 import React, { useContext, useState, useEffect } from "react";
+import { useHistory } from "react-router";
 import { SocketContext } from "../../context/SocketContext";
 import FlashCard from "../../components/Flashcard/Flashcard";
 import Button from "../../components/Button/Button";
@@ -7,6 +8,7 @@ import "./Lobby.css";
 
 const Lobby = () => {
   const socket = useContext(SocketContext);
+  const history=useHistory();
   const [players, setPlayers] = useState([]);
   let status = Number(sessionStorage.getItem("status"));
   const clickHandler = () => {
@@ -24,7 +26,8 @@ const Lobby = () => {
       });
 
       socket.on("start", () => {
-        window.location.href = "/round/1";
+        // window.location.href = "/round/1";
+        history.replace('/round/1')
       });
     }
 

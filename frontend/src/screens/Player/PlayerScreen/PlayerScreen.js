@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import Button from "../../../components/Button/Button";
 import { SocketContext } from "../../../context/SocketContext";
 import "./PlayerScreen.css";
@@ -8,6 +9,7 @@ const PlayerScreen = () => {
   const [inputCode, setInputCode] = useState("");
   const [playerName, setPlayerName] = useState("");
   const [code, correctCode] = useState(false);
+  const history = useHistory()
   useEffect(() => {
     sessionStorage.setItem("status", 0);
     socket.on("error", ({ message }) => {
@@ -33,7 +35,8 @@ const PlayerScreen = () => {
     socket.on("authenticated", value => {
       if (value === 1) {
         sessionStorage.setItem("game-code", inputCode);
-        window.location.href = `/lobby/${inputCode}`;
+        // window.location.href = `/lobby/${inputCode}`;
+        history.push(`/lobby/${inputCode}`)
         correctCode(true);
       } else {
         console.log(value);

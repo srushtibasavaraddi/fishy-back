@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext, useRef } from "react";
-import { useParams } from "react-router-dom";
+import { useParams , useHistory } from "react-router-dom";
 import Button from "../../../components/Button/Button";
 import DeckIcons from "../../../components/DeckIcons/DeckIcons";
 import FishOptions from "../../../components/FishOptions/FishOptions";
@@ -33,7 +33,7 @@ const GameRounds = () => {
   let timerID = useRef(null);
   let playerName = sessionStorage.getItem("playerName");
   let code = sessionStorage.getItem("game-code");
-
+  const history = useHistory()
   useEffect(() => {
     console.log("Inside use Effect");
     socket.emit("join-players", { code, playerName });
@@ -64,12 +64,14 @@ const GameRounds = () => {
       sessionStorage.removeItem("time-format");
       sessionStorage.removeItem("time-percent");
       sessionStorage.removeItem("time-val");
-      window.location.href = `/player/results/${roundNo.id}`;
+      // window.location.href = `/player/results/${roundNo.id}`;
+      history.push(`/player/results/${roundNo.id}`);
     });
 
     socket.on("quit-game", () => {
       console.log("Hi");
-      window.location.href = "/game";
+      // window.location.href = "/game";
+      history.push('/game')
     });
 
     socket.on("updateChoice", updatedChoice => {

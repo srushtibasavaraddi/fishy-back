@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react";
+import { useHistory } from "react-router";
 import FlashCard from "../../../components/Flashcard/Flashcard";
 import "./Scoreboard.css";
 import Scores from "../../../components/Scores/Scores";
@@ -10,6 +11,7 @@ const Scoreboard = () => {
   const [scoreData, setScores] = useState([]);
   const [playerData, setPlayers] = useState([]);
   const [show, setShow] = useState(false);
+  const history = useHistory()
 
   useEffect(() => {
     socket.emit("join-scores", sessionStorage.getItem('game-code'));
@@ -22,12 +24,16 @@ const Scoreboard = () => {
       setShow(!show);
     });
     socket.on("join-waiting", () => {
-      window.location.href = `/waiting`;
+      // window.location.href = `/waiting`;
+      history.push('/waiting')
     });
     socket.on("end-game", () => {
       sessionStorage.clear()
       
-      window.location.href = `/gameover`});
+      // window.location.href = `/gameover`
+      history.push('/gameover')
+    }
+      );
   }, [socket, show, scoreData.length]);
   return (
     <div className="flex flex-col justify-center items-center h-screen">

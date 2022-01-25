@@ -1,11 +1,13 @@
 import React, {useEffect} from 'react'
+import { useHistory } from "react-router";
 import './Home.css'
 import logo from '../../images/logo.png'
 const Home = () => {
-
+const history = useHistory();
     useEffect(() => {
         setTimeout(() => {
-            window.location.href = '/game'
+            // window.location.href = '/game'
+            history.push("/game");
         }, 4000);
     })
     

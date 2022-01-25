@@ -1,4 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from "react";
+import { useHistory } from "react-router";
 import Button from "../../components/Button/Button";
 import { SocketContext } from "../../context/SocketContext";
 import "./Waiting.css";
@@ -12,6 +13,7 @@ const Waiting = () => {
   const [active, setActive] = useState(false);
   const [counter, setCounter] = useState(180);
   const [waitingMsg, setWaitingMsg] = useState("");
+  const history = useHistory();
 
   useEffect(() => {
     sessionStorage.removeItem("time-val");
@@ -25,11 +27,16 @@ const Waiting = () => {
       setCounter(Number(sessionStorage.getItem("counter")));
     socket.emit("join-game", sessionStorage.getItem("game-code"));
     socket.on("next-round-started", roundNumber => {
-      window.location.href = `/round/${roundNumber}`;
+      // window.location.href = `/round/${roundNumber}`;
+      history.push(`/round/${roundNumber}`);
+
     });
     socket.on("round-number", roundNumber => setRoundNo(roundNumber));
     socket.on("message", ({ message }) => setWaitingMsg(message));
-    socket.on("game-over", () => (window.location.href = "/gameover"));
+    socket.on("game-over", () => {
+      // window.location.href = "/gameover"
+      history.push("/gameover");
+    });
     if (active) {
       if (counter > 0) {
         timerRef.current = setInterval(() => {
@@ -71,7 +78,8 @@ const Waiting = () => {
 
   const endGame = () => {
     socket.emit("game-over", sessionStorage.getItem("game-code"));
-    window.location.href = "/gameover";
+    // window.location.href = "/gameover";
+     history.push("/gameover");
   };
 
   const skipGameRound = () => {
